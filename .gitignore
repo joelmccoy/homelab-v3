@@ -1,0 +1,28 @@
+# OpenTofu / Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.example.tfvars
+.terraform.lock.hcl.bak
+crash.log
+crash.*.log
+
+# Local kubeconfigs and secrets
+kubeconfig
+kubeconfig.*
+*.kubeconfig
+talosconfig
+*.talosconfig
+*.pem
+*.key
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# mise / direnv
+.envrc.local
+.mise.local.toml

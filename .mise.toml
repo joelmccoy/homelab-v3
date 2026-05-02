@@ -1,0 +1,10 @@
+[env]
+KUBECONFIG = "{{config_root}}/kubeconfig"
+TALOSCONFIG = "{{config_root}}/talosconfig"
+TF_CLI_ARGS_init = "-upgrade"
+
+[tools]
+hk = "1.44.3"
+pkl = "0.31.1"
+gitleaks = "8.30.1"
+"npm:markdownlint-cli2" = "0.22.1"

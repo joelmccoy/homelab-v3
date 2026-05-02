@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#MISE description="Run all linters against the repo"
+set -euo pipefail
+hk check --all

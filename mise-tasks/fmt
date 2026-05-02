@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#MISE description="Auto-fix formatting"
+set -euo pipefail
+hk fix --all

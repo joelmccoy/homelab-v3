@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#MISE description="Install hk pre-commit hook into .git/hooks/"
+set -euo pipefail
+hk install
+echo "hk pre-commit hook installed."

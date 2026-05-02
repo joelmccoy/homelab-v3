@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#MISE description="Scaffold the next-numbered ADR under docs/adr/"
+#USAGE arg "<title>" help="Short kebab-case title for the ADR"
+set -euo pipefail
+
+title="${usage_title:-${1:-}}"
+if [[ -z "$title" ]]; then
+  echo "Usage: mise run adr-new <kebab-case-title>" >&2
+  exit 2
+fi
+
+cd "$(dirname "$0")/.."
+last=$(find docs/adr -maxdepth 1 -type f -name '[0-9][0-9][0-9][0-9]-*.md' \
+  | sort | tail -n1 | sed -E 's|.*/([0-9]{4}).*|\1|')
+next=$(printf "%04d" $((10#${last:-0} + 1)))
+date_str=$(date +%Y-%m-%d)
+out="docs/adr/${next}-${title}.md"
+
+cp docs/adr/template.md "$out"
+sed -i.bak "s/NNNN/${next}/g; s/YYYY-MM-DD/${date_str}/g; s/<title>/${title}/g" "$out"
+rm "${out}.bak"
+echo "Created $out"
