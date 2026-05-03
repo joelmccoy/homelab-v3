@@ -1,0 +1,27 @@
+# Realm configuration applied by keycloak-config-cli on every sync.
+# Per-app SSO clients are NOT defined here — those are managed by Crossplane
+# Client CRs in each app's own dir. This config is for realm-level settings only.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-realm-config
+  namespace: keycloak
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+data:
+  homelab.yaml: |
+    realm: homelab
+    enabled: true
+    displayName: "homelab"
+    registrationAllowed: false
+    loginTheme: keycloak
+    sslRequired: external
+    accessTokenLifespan: 3600
+    ssoSessionIdleTimeout: 28800
+    ssoSessionMaxLifespan: 86400
+    passwordPolicy: "length(12) and notUsername and digits(1) and specialChars(1)"
+    roles:
+      realm: []
+    groups: []
+    # clients managed by Crossplane Client CRs (in each app's manifests dir).
+    # Don't add clients here — they'd conflict with Crossplane reconciliation.

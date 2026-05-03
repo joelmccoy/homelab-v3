@@ -1,0 +1,36 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: keycloak
+  namespace: keycloak
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  instances: 1                       # bump for HA later
+  bootstrapAdmin:
+    user:
+      secret: keycloak-bootstrap-admin
+  hostname:
+    hostname: sso.joelmccoy.dev
+    strict: true
+  http:
+    httpEnabled: true                # TLS terminated at Istio Gateway; KC speaks HTTP in-cluster
+  proxy:
+    headers: xforwarded              # honor X-Forwarded-* from gateway
+  db:
+    vendor: postgres
+    host: keycloak-pg-rw
+    port: 5432
+    database: keycloak
+    usernameSecret:
+      name: keycloak-pg-app
+      key: username
+    passwordSecret:
+      name: keycloak-pg-app
+      key: password
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 1Gi

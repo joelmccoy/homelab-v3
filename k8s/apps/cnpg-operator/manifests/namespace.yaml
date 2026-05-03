@@ -1,8 +1,9 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: cloudflared
+  name: cnpg-system
   annotations:
     argocd.argoproj.io/sync-wave: "-100"
   labels:
+    # operator only watches APIs; safe to mesh.
     istio.io/dataplane-mode: ambient

@@ -81,12 +81,18 @@ plain manifests, or both.
 | ![Alertmanager](https://img.shields.io/badge/Alertmanager-E6522C?style=flat-square&logo=prometheus&logoColor=white) | Alertmanager | Alert routing and notification engine, installed by kube-prometheus-stack. | [`k8s/apps/monitoring/values.yaml`](k8s/apps/monitoring/values.yaml) | [Docs](https://prometheus.io/docs/alerting/latest/alertmanager/) |
 | ![node-exporter](https://img.shields.io/badge/node--exporter-E6522C?style=flat-square&logo=prometheus&logoColor=white) | node-exporter | Exposes Linux node CPU, memory, filesystem, and network metrics. | [`k8s/apps/monitoring/values.yaml`](k8s/apps/monitoring/values.yaml) | [Docs](https://github.com/prometheus/node_exporter) |
 | ![kube-state-metrics](https://img.shields.io/badge/kube--state--metrics-326CE5?style=flat-square&logo=kubernetes&logoColor=white) | kube-state-metrics | Converts Kubernetes object state into Prometheus metrics. | [`k8s/apps/monitoring/values.yaml`](k8s/apps/monitoring/values.yaml) | [Docs](https://github.com/kubernetes/kube-state-metrics) |
+| ![CloudNativePG](https://img.shields.io/badge/CloudNativePG-336791?style=flat-square&logo=postgresql&logoColor=white) | CloudNativePG | Postgres operator. Each app declares its own `Cluster` CR; DBs live in app namespaces. | [`k8s/apps/cnpg-operator/`](k8s/apps/cnpg-operator/) | [Docs](https://cloudnative-pg.io/) |
+| ![Crossplane](https://img.shields.io/badge/Crossplane-7F7FFF?style=flat-square&logo=crossplane&logoColor=white) | Crossplane | Universal control plane. Hosts provider-keycloak for declarative SSO clients per app. | [`k8s/apps/crossplane/`](k8s/apps/crossplane/) | [Docs](https://docs.crossplane.io/) |
+| ![Keycloak](https://img.shields.io/badge/Keycloak%20Operator-EA002C?style=flat-square&logo=keycloak&logoColor=white) | Keycloak operator | Manages Keycloak instance lifecycle via the `Keycloak` CR. | [`k8s/apps/keycloak-operator/`](k8s/apps/keycloak-operator/) | [Docs](https://www.keycloak.org/operator/installation) |
+| ![Keycloak](https://img.shields.io/badge/Keycloak-EA002C?style=flat-square&logo=keycloak&logoColor=white) | Keycloak | OIDC identity provider for cluster apps. Realm-level config via `keycloak-config-cli` PostSync hook; per-app clients via Crossplane `Client` CRs. | [`k8s/apps/keycloak/`](k8s/apps/keycloak/) | [Docs](https://www.keycloak.org/documentation) |
+| ![provider-keycloak](https://img.shields.io/badge/provider--keycloak-7F7FFF?style=flat-square) | provider-keycloak | Crossplane provider that reconciles Keycloak realms, clients, users via admin API. | [`k8s/apps/crossplane-providers/`](k8s/apps/crossplane-providers/) | [Docs](https://github.com/crossplane-contrib/provider-keycloak) |
 
 ## Public routes
 
 | Hostname | Owner | Purpose |
 | --- | --- | --- |
 | [`argo.joelmccoy.dev`](https://argo.joelmccoy.dev) | Argo CD | GitOps UI and operational dashboard. |
+| [`sso.joelmccoy.dev`](https://sso.joelmccoy.dev) | Keycloak | OIDC identity provider; serves the `homelab` realm. |
 | `*.joelmccoy.dev` | Istio Gateway + cert-manager | Wildcard HTTPS listener for future homelab services. |
 
 ## Operating model

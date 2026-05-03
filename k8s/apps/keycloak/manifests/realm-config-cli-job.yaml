@@ -1,0 +1,59 @@
+# PostSync hook: applies realm config from the ConfigMap above against the running Keycloak.
+# Re-runs every time ArgoCD syncs the keycloak Application — keeps realm-level config drift-free.
+# Per-app SSO clients are explicitly excluded here (managed by Crossplane).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: keycloak-config-cli
+  namespace: keycloak
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+spec:
+  ttlSecondsAfterFinished: 600
+  backoffLimit: 5
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: keycloak-config-cli
+          image: adorsys/keycloak-config-cli:6.5.0
+          env:
+            - name: KEYCLOAK_URL
+              value: http://keycloak-service:8080
+            - name: KEYCLOAK_USER
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-bootstrap-admin
+                  key: username
+            - name: KEYCLOAK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-bootstrap-admin
+                  key: password
+            - name: KEYCLOAK_AVAILABILITYCHECK_ENABLED
+              value: "true"
+            - name: KEYCLOAK_AVAILABILITYCHECK_TIMEOUT
+              value: "120s"
+            - name: IMPORT_FILES_LOCATIONS
+              value: /config/*.yaml
+            - name: IMPORT_VARSUBSTITUTION_ENABLED
+              value: "true"
+            # Realm-level only: managed-clients/users left untouched (Crossplane owns them).
+            - name: IMPORT_MANAGED_CLIENT
+              value: no-delete
+            - name: IMPORT_MANAGED_GROUP
+              value: no-delete
+          volumeMounts:
+            - name: realm-config
+              mountPath: /config
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+      volumes:
+        - name: realm-config
+          configMap:
+            name: keycloak-realm-config

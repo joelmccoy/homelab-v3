@@ -1,0 +1,11 @@
+# Crossplane core helm values.
+
+resourcesCrossplane:
+  requests:
+    cpu: 50m
+    memory: 256Mi
+
+resourcesRBACManager:
+  requests:
+    cpu: 50m
+    memory: 64Mi

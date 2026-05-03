@@ -15,6 +15,16 @@ Personal homelab. Talos Kubernetes on Proxmox; OpenTofu provisions infra and Clo
 - **Runtime state is owned by ArgoCD** once bootstrapped. Don't `kubectl apply` directly — change git, push, let ArgoCD reconcile.
 - **Don't pre-add files, configs, or scripts speculatively.** Add as needed; remove when no longer needed.
 
+## When adding a new app/component
+
+Three things happen together — never one without the others:
+
+1. **Implement it** under `k8s/apps/<name>/` following the existing pattern (`application.yaml` + `manifests/` + optional `values.yaml`). New namespace? Include a `manifests/namespace.yaml` with the `istio.io/dataplane-mode: ambient` label unless there's a reason not to (mesh-incompat workload).
+2. **Capture every non-trivial choice as an ADR.** Tool selection (chart vs operator), data model, integration shape — anything the next person would otherwise have to reverse-engineer from yaml. Brief format. Use `mise run adr-new <kebab-title>`.
+3. **Update `README.md`** — add a row to the relevant table (`Platform building blocks` for infra, `GitOps apps` for cluster components). Keep the badge style consistent with existing rows.
+
+Skipping any of the three is a half-finished change.
+
 ## Where to look
 
 - Current phase scope: `docs/superpowers/specs/`

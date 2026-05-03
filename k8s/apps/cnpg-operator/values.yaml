@@ -1,0 +1,10 @@
+# CloudNativePG operator values.
+# Cluster-wide watch by default — Cluster CRs can live in any namespace.
+
+monitoring:
+  podMonitorEnabled: false
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 100Mi

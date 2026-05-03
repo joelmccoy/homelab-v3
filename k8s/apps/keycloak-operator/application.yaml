@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: keycloak-operator
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+spec:
+  project: default
+  sources:
+    # CRDs and operator deployment from upstream Keycloak release.
+    - repoURL: https://github.com/keycloak/keycloak-k8s-resources.git
+      targetRevision: "26.6.1"
+      path: kubernetes
+    - repoURL: https://github.com/joelmccoy/homelab-v3.git
+      targetRevision: main
+      path: k8s/apps/keycloak-operator/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: keycloak-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
