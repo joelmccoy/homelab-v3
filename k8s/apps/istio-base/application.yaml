@@ -31,9 +31,10 @@ spec:
     syncOptions:
       - ServerSideApply=true
       - RespectIgnoreDifferences=true
-  # Istio injects caBundle at runtime; ignore it.
+  # Istio injects caBundle and toggles failurePolicy at runtime.
   ignoreDifferences:
     - group: admissionregistration.k8s.io
       kind: ValidatingWebhookConfiguration
       jsonPointers:
         - /webhooks/0/clientConfig/caBundle
+        - /webhooks/0/failurePolicy
