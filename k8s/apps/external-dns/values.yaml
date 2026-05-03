@@ -1,6 +1,10 @@
 # external-dns helm values.
 # Watches Gateway/HTTPRoute resources, writes CNAMEs to Cloudflare.
 
+image:
+  repository: registry.k8s.io/external-dns/external-dns
+  tag: v0.21.0
+
 provider:
   name: cloudflare
 
