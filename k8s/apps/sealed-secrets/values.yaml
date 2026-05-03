@@ -1,0 +1,11 @@
+# sealed-secrets controller helm values.
+fullnameOverride: sealed-secrets-controller
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+# Persist controller's encryption key on Longhorn so re-installs decrypt existing SealedSecrets.
+persistence:
+  enabled: false  # uses ephemeral keys at first; controller stores keys in cluster Secrets
