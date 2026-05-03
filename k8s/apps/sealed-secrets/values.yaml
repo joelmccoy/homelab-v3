@@ -9,3 +9,8 @@ resources:
 # Persist controller's encryption key on Longhorn so re-installs decrypt existing SealedSecrets.
 persistence:
   enabled: false  # uses ephemeral keys at first; controller stores keys in cluster Secrets
+
+image:
+  registry: docker.io
+  repository: bitnami/sealed-secrets-controller
+  tag: 0.36.6
