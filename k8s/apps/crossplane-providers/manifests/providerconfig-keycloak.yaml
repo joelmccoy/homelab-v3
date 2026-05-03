@@ -1,6 +1,5 @@
 # ProviderConfig tells provider-keycloak how to authenticate to Keycloak admin API.
-# References the auto-generated initial-admin Secret in keycloak ns.
-# Crossplane reads username + password from the Secret; uses them with master-realm admin.
+# Credentials Secret holds JSON with: client_id, username, password, realm, url.
 apiVersion: keycloak.crossplane.io/v1beta1
 kind: ProviderConfig
 metadata:
@@ -8,15 +7,11 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "10"
     # CRD only exists after the Provider above has downloaded its pkg.
-    # Skip dry-run so first-sync doesn't abort before Provider lands.
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  endpoint:
-    url: http://keycloak-service.keycloak-system.svc.cluster.local:8080
-    base_path: ""
   credentials:
     source: Secret
     secretRef:
       namespace: keycloak-system
       name: keycloak-crossplane-credentials
-      key: credentials   # JSON: {"client_id":"admin-cli","username":"admin","password":"...","realm":"master"}
+      key: credentials
