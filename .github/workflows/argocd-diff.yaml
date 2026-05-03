@@ -1,0 +1,31 @@
+name: argocd-diff
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "k8s/apps/**"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  diff:
+    name: ArgoCD manifest diff preview
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        # actions/checkout@v4.3.1
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          fetch-depth: 0
+
+      - name: Render diff and post comment
+        # dag-andersen/argocd-diff-preview@v0.1.18
+        uses: dag-andersen/argocd-diff-preview@v0.1.18
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          base-branch: main
+          target-branch: ${{ github.head_ref }}
+          argocd-version: v3.3.9
