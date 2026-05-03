@@ -7,6 +7,10 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
 spec:
   instances: 1                       # bump for HA later
+  # Operator-managed NetworkPolicy blocks ztunnel HBONE (port 15008).
+  # Ambient already provides L4 mTLS isolation; this NP is redundant + breaks mesh.
+  networkPolicy:
+    enabled: false
   bootstrapAdmin:
     user:
       secret: keycloak-bootstrap-admin
