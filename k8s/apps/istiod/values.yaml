@@ -1,5 +1,10 @@
 # istiod: Istio control plane, Ambient profile.
 
+hub: docker.io/istio
+# renovate: datasource=docker depName=docker.io/istio/pilot versioning=docker
+tag: 1.29.2
+variant: distroless
+
 profile: ambient
 
 pilot:

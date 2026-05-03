@@ -1,3 +1,8 @@
 # ztunnel: Ambient data plane (per-node L4 proxy).
 
+hub: docker.io/istio
+# renovate: datasource=docker depName=docker.io/istio/ztunnel versioning=docker
+tag: 1.29.2
+variant: distroless
+
 profile: ambient
