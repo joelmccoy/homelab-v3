@@ -52,8 +52,10 @@ Argo CD-managed Kubernetes apps on Talos VMs
 
 ## GitOps apps
 
-Everything below is discovered by the Argo CD app-of-apps in
-[`k8s/apps/_apps.yaml`](k8s/apps/_apps.yaml). Each app owns either a Helm chart,
+The table below inventories GitOps-managed platform components. Some rows are
+direct Argo CD child apps discovered by
+[`k8s/apps/_apps.yaml`](k8s/apps/_apps.yaml), while others are notable
+subcomponents or features configured within those apps via Helm values,
 plain manifests, or both.
 
 | SVG | App | What it is used for | Repo | Upstream |
