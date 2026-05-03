@@ -16,16 +16,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout pull request
-        # actions/checkout@v4.3.1
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           path: target-branch
           fetch-depth: 0
 
       - name: Checkout base branch
-        # actions/checkout@v4.3.1
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           ref: main
           path: base-branch
@@ -42,7 +40,7 @@ jobs:
             -v "${{ github.workspace }}/output:/output" \
             -e TARGET_BRANCH="${{ github.head_ref }}" \
             -e REPO="${{ github.repository }}" \
-            dagandersen/argocd-diff-preview@sha256:54407a065415b49b13c32739bbb7227b3704d1d5fa3ced7fdbfb963462e898f6
+            dagandersen/argocd-diff-preview:v0.1.17@sha256:54407a065415b49b13c32739bbb7227b3704d1d5fa3ced7fdbfb963462e898f6
 
       - name: Post diff as PR comment
         run: |
