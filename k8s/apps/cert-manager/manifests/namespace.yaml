@@ -4,4 +4,5 @@ metadata:
   name: cert-manager
   annotations:
     argocd.argoproj.io/sync-wave: "-100"
-  labels: {}
+  labels:
+    istio.io/dataplane-mode: ambient
