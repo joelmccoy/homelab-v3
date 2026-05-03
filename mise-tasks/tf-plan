@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#MISE description="OpenTofu plan against tofu/"
+set -euo pipefail
+cd "$(dirname "$0")/../tofu"
+tofu plan -out=tfplan

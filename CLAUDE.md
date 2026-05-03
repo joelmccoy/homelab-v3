@@ -21,3 +21,4 @@ Personal homelab. Talos Kubernetes on Proxmox; OpenTofu provisions infra and Clo
 - Implementation plan: `docs/superpowers/plans/`
 - Why the setup looks the way it does: `docs/adr/`
 - Available task commands: `mise tasks`
+- One-time cluster bring-up: `docs/bootstrap.md`

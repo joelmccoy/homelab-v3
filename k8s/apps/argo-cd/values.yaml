@@ -1,0 +1,27 @@
+# ArgoCD helm values.
+# Single source: consumed by scripts/bootstrap.sh and k8s/apps/argo-cd/application.yaml.
+
+global:
+  domain: argocd.joelmccoy.dev
+
+configs:
+  params:
+    server.insecure: "true"   # TLS terminates at Istio Gateway later
+  cm:
+    application.resourceTrackingMethod: annotation
+    timeout.reconciliation: 60s
+
+server:
+  extraArgs:
+    - --insecure
+  service:
+    type: ClusterIP
+
+applicationSet:
+  enabled: true
+
+dex:
+  enabled: false
+
+notifications:
+  enabled: false

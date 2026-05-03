@@ -1,0 +1,21 @@
+# Longhorn helm values.
+# Single source: consumed by k8s/apps/longhorn/application.yaml.
+
+defaultSettings:
+  defaultDataPath: /var/mnt/longhorn-data
+  createDefaultDiskLabeledNodes: false
+  defaultReplicaCount: 2
+  replicaSoftAntiAffinity: true
+  storageOverProvisioningPercentage: 200
+
+persistence:
+  defaultClass: true
+  defaultClassReplicaCount: 2
+  defaultDataLocality: best-effort
+  defaultFsType: ext4
+
+longhornUI:
+  replicas: 1
+
+ingress:
+  enabled: false

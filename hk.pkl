@@ -1,25 +1,40 @@
 amends "package://github.com/jdx/hk/releases/download/v1.44.3/hk@1.44.3#/Config.pkl"
 import "package://github.com/jdx/hk/releases/download/v1.44.3/hk@1.44.3#/Builtins.pkl"
 
-local linters = new Mapping<String, Step> {
-    ["gitleaks"] = Builtins.gitleaks
-    ["markdown_lint"] = (Builtins.markdown_lint) {
-        check = "markdownlint-cli2 {{ files }}"
-        fix = "markdownlint-cli2 --fix {{ files }}"
-    }
+local markdown = (Builtins.markdown_lint) {
+    check = "markdownlint-cli2 {{ files }}"
+    fix = "markdownlint-cli2 --fix {{ files }}"
+}
+
+// gitleaks git scans commit history; ignores untracked and gitignored files.
+local gitleaks_full = (Builtins.gitleaks) {
+    check = "gitleaks git --redact --no-banner ."
+}
+
+local gitleaks_staged = (Builtins.gitleaks) {
+    check = "gitleaks git --staged --redact --no-banner ."
 }
 
 hooks {
     ["pre-commit"] {
         fix = true
         stash = "git"
-        steps = linters
+        steps {
+            ["gitleaks"] = gitleaks_staged
+            ["markdown_lint"] = markdown
+        }
     }
     ["fix"] {
         fix = true
-        steps = linters
+        steps {
+            ["gitleaks"] = gitleaks_full
+            ["markdown_lint"] = markdown
+        }
     }
     ["check"] {
-        steps = linters
+        steps {
+            ["gitleaks"] = gitleaks_full
+            ["markdown_lint"] = markdown
+        }
     }
 }

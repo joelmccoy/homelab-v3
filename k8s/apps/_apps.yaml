@@ -1,0 +1,27 @@
+# Root app-of-apps: ArgoCD application that discovers every k8s/apps/<app>/application.yaml.
+# Apply once after ArgoCD bootstrap. From there, ArgoCD owns everything.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: apps
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/joelmccoy/homelab-v3.git
+    targetRevision: main
+    path: k8s/apps
+    directory:
+      recurse: false
+      include: "*/application.yaml"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true

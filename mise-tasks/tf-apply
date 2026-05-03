@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#MISE description="OpenTofu apply (uses saved tfplan if present, else -auto-approve)"
+set -euo pipefail
+cd "$(dirname "$0")/../tofu"
+if [[ -f tfplan ]]; then
+  tofu apply tfplan
+  rm -f tfplan
+else
+  tofu apply -auto-approve
+fi
