@@ -1,5 +1,9 @@
 # Crossplane core helm values.
 
+image:
+  repository: xpkg.crossplane.io/crossplane/crossplane
+  tag: v2.2.1
+
 resourcesCrossplane:
   requests:
     cpu: 50m
