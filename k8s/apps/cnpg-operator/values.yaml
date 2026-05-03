@@ -1,6 +1,10 @@
 # CloudNativePG operator values.
 # Cluster-wide watch by default — Cluster CRs can live in any namespace.
 
+image:
+  repository: ghcr.io/cloudnative-pg/cloudnative-pg
+  tag: 1.29.0
+
 monitoring:
   podMonitorEnabled: false
 
