@@ -1,6 +1,134 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "dependencyDashboard": true,
+  "labels": ["dependencies"],
+  "timezone": "America/Chicago",
+  "schedule": ["before 5am on monday"],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "minimumReleaseAge": "2 days",
+  "rebaseWhen": "conflicted",
+  "ignorePaths": ["docs/**"],
+  "argocd": {
+    "managerFilePatterns": ["/^k8s/apps/.+/application\\.ya?ml$/"]
+  },
+  "kubernetes": {
+    "managerFilePatterns": ["/^k8s/apps/.+\\.ya?ml$/"]
+  },
+  "helm-values": {
+    "managerFilePatterns": ["/^k8s/apps/.+/values\\.ya?ml$/"]
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update Crossplane Provider OCI packages.",
+      "managerFilePatterns": ["/^k8s/apps/crossplane-providers/manifests/.+\\.ya?ml$/"],
+      "matchStrings": ["package:\\s+(?<depName>[^:\\s]+):(?<currentValue>[^\\s]+)"],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Update Docker images pinned by digest inside GitHub workflow shell steps.",
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": ["(?<depName>[a-z0-9._/-]+):(?<currentValue>[A-Za-z0-9._-]+)@(?<currentDigest>sha256:[a-f0-9]{64})"],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker",
+      "autoReplaceStringTemplate": "{{{depName}}}:{{{newValue}}}@{{#if newDigest}}{{{newDigest}}}{{else}}{{{currentDigest}}}{{/if}}"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Require manual approval for major updates from the dependency dashboard.",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Group CI, repository automation, OpenTofu, and pinned developer tooling together as support dependencies.",
+      "matchFileNames": [
+        ".github/workflows/**",
+        ".mise.toml",
+        "tofu/**",
+        "renovate.json"
+      ],
+      "groupName": "support dependencies"
+    },
+    {
+      "description": "Group Argo CD app dependencies.",
+      "matchFileNames": ["k8s/apps/argo-cd/**"],
+      "groupName": "argo-cd dependencies"
+    },
+    {
+      "description": "Group cert-manager app dependencies.",
+      "matchFileNames": ["k8s/apps/cert-manager/**"],
+      "groupName": "cert-manager dependencies"
+    },
+    {
+      "description": "Group Cilium app dependencies.",
+      "matchFileNames": ["k8s/apps/cilium/**"],
+      "groupName": "cilium dependencies"
+    },
+    {
+      "description": "Group cloudflared app dependencies.",
+      "matchFileNames": ["k8s/apps/cloudflared/**"],
+      "groupName": "cloudflared dependencies"
+    },
+    {
+      "description": "Group CloudNativePG operator dependencies.",
+      "matchFileNames": ["k8s/apps/cnpg-operator/**"],
+      "groupName": "cnpg-operator dependencies"
+    },
+    {
+      "description": "Group Crossplane and provider dependencies.",
+      "matchFileNames": [
+        "k8s/apps/crossplane/**",
+        "k8s/apps/crossplane-providers/**"
+      ],
+      "groupName": "crossplane dependencies"
+    },
+    {
+      "description": "Group external-dns app dependencies.",
+      "matchFileNames": ["k8s/apps/external-dns/**"],
+      "groupName": "external-dns dependencies"
+    },
+    {
+      "description": "Group Istio and Gateway API dependencies that should move together deliberately.",
+      "matchFileNames": [
+        "k8s/apps/gateway-api/**",
+        "k8s/apps/istio-base/**",
+        "k8s/apps/istio-cni/**",
+        "k8s/apps/istio-gateway/**",
+        "k8s/apps/istio-ztunnel/**",
+        "k8s/apps/istiod/**"
+      ],
+      "groupName": "istio dependencies"
+    },
+    {
+      "description": "Group Keycloak app and operator dependencies.",
+      "matchFileNames": [
+        "k8s/apps/keycloak/**",
+        "k8s/apps/keycloak-operator/**"
+      ],
+      "groupName": "keycloak dependencies"
+    },
+    {
+      "description": "Group Longhorn app dependencies.",
+      "matchFileNames": ["k8s/apps/longhorn/**"],
+      "groupName": "longhorn dependencies"
+    },
+    {
+      "description": "Group monitoring stack dependencies.",
+      "matchFileNames": ["k8s/apps/monitoring/**"],
+      "groupName": "monitoring dependencies"
+    },
+    {
+      "description": "Group sealed-secrets app dependencies.",
+      "matchFileNames": ["k8s/apps/sealed-secrets/**"],
+      "groupName": "sealed-secrets dependencies"
+    }
   ]
 }
