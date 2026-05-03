@@ -115,11 +115,9 @@ spec:
               memory: 512Mi
             limits:
               memory: 1Gi
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
+          # Mealie's container entrypoint starts as root, fixes ownership on
+          # /app and /app/data, then drops to PUID/PGID. Do not drop default
+          # capabilities here; it needs CHOWN/SETUID/SETGID during startup.
       volumes:
         - name: data
           persistentVolumeClaim:
