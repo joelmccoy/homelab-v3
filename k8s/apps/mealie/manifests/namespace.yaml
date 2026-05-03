@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mealie
+  annotations:
+    argocd.argoproj.io/sync-wave: "-100"
+  labels:
+    app.kubernetes.io/name: mealie
+    istio.io/dataplane-mode: ambient

@@ -1,0 +1,52 @@
+# Crossplane-managed public OIDC client for Mealie.
+# Mealie uses Authorization Code + PKCE and does not need a client secret.
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: mealie
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  providerConfigRef:
+    name: keycloak
+  forProvider:
+    realmId: homelab
+    clientId: mealie
+    name: Mealie
+    description: Mealie recipe manager
+    enabled: true
+    accessType: PUBLIC
+    standardFlowEnabled: true
+    directAccessGrantsEnabled: false
+    serviceAccountsEnabled: false
+    pkceCodeChallengeMethod: S256
+    validRedirectUris:
+      - https://mealie.joelmccoy.dev/login
+      - https://mealie.joelmccoy.dev/login?direct=1
+    validPostLogoutRedirectUris:
+      - https://mealie.joelmccoy.dev/login
+      - https://mealie.joelmccoy.dev/login?direct=1
+    webOrigins:
+      - https://mealie.joelmccoy.dev
+    rootUrl: https://mealie.joelmccoy.dev
+    baseUrl: /
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientDefaultScopes
+metadata:
+  name: mealie
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  providerConfigRef:
+    name: keycloak
+  forProvider:
+    realmId: homelab
+    clientIdRef:
+      name: mealie
+    defaultScopes:
+      - profile
+      - email
+      - groups
