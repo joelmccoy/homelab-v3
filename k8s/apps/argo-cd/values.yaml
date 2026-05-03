@@ -2,7 +2,7 @@
 # Single source: consumed by docs/bootstrap.md and k8s/apps/argo-cd/application.yaml.
 
 global:
-  domain: argo.lab.joelmccoy.dev
+  domain: argo.joelmccoy.dev
 
 configs:
   params:
@@ -25,7 +25,7 @@ dex:
 
 notifications:
   enabled: true
-  argocdUrl: https://argo.lab.joelmccoy.dev
+  argocdUrl: https://argo.joelmccoy.dev
 
   # Secret is provided as a SealedSecret in manifests/notifications-sealed-secret.yaml.
   secret:

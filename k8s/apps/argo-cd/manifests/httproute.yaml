@@ -10,7 +10,7 @@ spec:
       name: istio-gateway
       namespace: istio-ingress
   hostnames:
-    - "argo.lab.joelmccoy.dev"
+    - "argo.joelmccoy.dev"
   rules:
     - matches:
         - path:

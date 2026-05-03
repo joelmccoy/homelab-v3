@@ -17,13 +17,13 @@ spec:
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "*.lab.joelmccoy.dev"
+      hostname: "*.joelmccoy.dev"
       tls:
         mode: Terminate
         certificateRefs:
           - group: ""
             kind: Secret
-            name: wildcard-lab-joelmccoy-dev-tls
+            name: wildcard-joelmccoy-dev-tls
       allowedRoutes:
         namespaces:
           from: All

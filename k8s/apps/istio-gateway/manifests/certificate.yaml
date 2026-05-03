@@ -1,15 +1,15 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: wildcard-lab-joelmccoy-dev
+  name: wildcard-joelmccoy-dev
   namespace: istio-ingress
   annotations:
     argocd.argoproj.io/sync-wave: "0"
 spec:
-  secretName: wildcard-lab-joelmccoy-dev-tls
+  secretName: wildcard-joelmccoy-dev-tls
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt-prod
   dnsNames:
-    - "lab.joelmccoy.dev"
-    - "*.lab.joelmccoy.dev"
+    - "joelmccoy.dev"
+    - "*.joelmccoy.dev"
