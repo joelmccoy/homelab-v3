@@ -1,6 +1,13 @@
 # Longhorn helm values.
 # Single source: consumed by k8s/apps/longhorn/application.yaml.
 
+# The pre-upgrade checker Job is a Helm pre-upgrade hook that requires the
+# longhorn-service-account, which is created in the Sync phase — but ArgoCD
+# runs Helm hooks in PreSync, before the SA exists. Result: deadlock on first
+# install. The chart authors expose this opt-out for exactly this case.
+preUpgradeChecker:
+  jobEnabled: false
+
 defaultSettings:
   defaultDataPath: /var/mnt/longhorn-data
   createDefaultDiskLabeledNodes: false
