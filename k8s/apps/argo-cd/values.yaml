@@ -1,5 +1,5 @@
 # ArgoCD helm values.
-# Single source: consumed by scripts/bootstrap.sh and k8s/apps/argo-cd/application.yaml.
+# Single source: consumed by docs/bootstrap.md and k8s/apps/argo-cd/application.yaml.
 
 global:
   domain: argocd.joelmccoy.dev
@@ -24,4 +24,72 @@ dex:
   enabled: false
 
 notifications:
-  enabled: false
+  enabled: true
+  argocdUrl: https://argocd.joelmccoy.dev
+
+  # Secret is provided as a SealedSecret in manifests/notifications-sealed-secret.yaml.
+  secret:
+    create: false
+
+  notifiers:
+    service.github: |
+      appID: 3583267
+      installationID: 129064009
+      privateKey: $github-privateKey
+
+  templates:
+    template.app-deployed: |
+      message: |
+        Application {{.app.metadata.name}} is synced and healthy.
+        Revision: {{.app.status.operationState.syncResult.revision}}
+      github:
+        repoURLPath: "{{.app.spec.source.repoURL}}"
+        revisionPath: "{{.app.status.operationState.syncResult.revision}}"
+        status:
+          state: success
+          label: "argocd/{{.app.metadata.name}}"
+          targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}"
+    template.app-sync-failed: |
+      message: |
+        Sync failed for {{.app.metadata.name}}: {{.app.status.operationState.message}}
+      github:
+        repoURLPath: "{{.app.spec.source.repoURL}}"
+        revisionPath: "{{.app.status.operationState.syncResult.revision}}"
+        status:
+          state: failure
+          label: "argocd/{{.app.metadata.name}}"
+          targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}"
+    template.app-sync-running: |
+      message: |
+        Syncing {{.app.metadata.name}}.
+      github:
+        repoURLPath: "{{.app.spec.source.repoURL}}"
+        revisionPath: "{{.app.status.operationState.syncResult.revision}}"
+        status:
+          state: pending
+          label: "argocd/{{.app.metadata.name}}"
+          targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}"
+
+  triggers:
+    trigger.on-deployed: |
+      - description: Application is synced and healthy
+        oncePer: app.status.operationState.syncResult.revision
+        when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
+        send: [app-deployed]
+    trigger.on-sync-failed: |
+      - description: Application sync failed
+        when: app.status.operationState.phase in ['Error', 'Failed']
+        send: [app-sync-failed]
+    trigger.on-sync-running: |
+      - description: Application is syncing
+        when: app.status.operationState.phase in ['Running']
+        send: [app-sync-running]
+
+  # Apply notifications to every Application by default.
+  subscriptions:
+    - recipients:
+        - github
+      triggers:
+        - on-deployed
+        - on-sync-failed
+        - on-sync-running
