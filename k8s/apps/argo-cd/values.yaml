@@ -10,6 +10,11 @@ configs:
   cm:
     application.resourceTrackingMethod: annotation
     timeout.reconciliation: 60s
+  secret:
+    # Mark argocd-secret as managed by sealed-secrets so a SealedSecret with
+    # `patch: true` can merge in extra keys (e.g. webhook.github.secret).
+    annotations:
+      sealedsecrets.bitnami.com/managed: "true"
 
 server:
   extraArgs:
