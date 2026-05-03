@@ -15,17 +15,43 @@ jobs:
     name: ArgoCD manifest diff preview
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout pull request
         # actions/checkout@v4.3.1
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: target-branch
           fetch-depth: 0
 
-      - name: Render diff and post comment
-        # dag-andersen/argocd-diff-preview@v0.1.18
-        uses: dag-andersen/argocd-diff-preview@v0.1.18
+      - name: Checkout base branch
+        # actions/checkout@v4.3.1
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          base-branch: main
-          target-branch: ${{ github.head_ref }}
-          argocd-version: v3.3.9
+          ref: main
+          path: base-branch
+          fetch-depth: 0
+
+      - name: Render ArgoCD diff
+        run: |
+          mkdir -p output
+          docker run \
+            --network=host \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v "${{ github.workspace }}/base-branch:/base-branch" \
+            -v "${{ github.workspace }}/target-branch:/target-branch" \
+            -v "${{ github.workspace }}/output:/output" \
+            -e TARGET_BRANCH="${{ github.head_ref }}" \
+            -e REPO="${{ github.repository }}" \
+            dagandersen/argocd-diff-preview@sha256:54407a065415b49b13c32739bbb7227b3704d1d5fa3ced7fdbfb963462e898f6
+
+      - name: Post diff as PR comment
+        run: |
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --repo "${{ github.repository }}" \
+            --body-file output/diff.md \
+            --edit-last || \
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --repo "${{ github.repository }}" \
+            --body-file output/diff.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -5,7 +5,7 @@ crds:
   enabled: true
 
 prometheus:
-  enabled: false
+  enabled: true
 
 # DNS01 with public DNS-over-https (avoid recursion through cluster DNS).
 extraArgs:

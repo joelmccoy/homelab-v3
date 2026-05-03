@@ -1,0 +1,85 @@
+# kube-prometheus-stack helm values.
+# Single source: consumed by k8s/apps/monitoring/application.yaml.
+
+crds:
+  enabled: true
+
+# Cilium is running with kube-proxy replacement, so kube-proxy targets and rules
+# would be permanently absent/noisy.
+kubeProxy:
+  enabled: false
+
+# Talos control-plane component metrics need a deliberate scrape plan. Keep
+# these disabled for the foundation PR rather than shipping false-positive
+# targets against loopback- or certificate-protected endpoints.
+kubeControllerManager:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+kubeEtcd:
+  enabled: false
+
+# Grafana is intentionally deferred until auth, exposure, and admin credential
+# handling are explicit. The Grafana chart otherwise generates an admin Secret,
+# which is awkward under deterministic GitOps rendering.
+grafana:
+  enabled: false
+
+alertmanager:
+  enabled: true
+  alertmanagerSpec:
+    replicas: 1
+    retention: 120h
+    storage:
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 2Gi
+
+prometheus:
+  enabled: true
+  prometheusSpec:
+    replicas: 1
+    retention: 14d
+    retentionSize: 18GiB
+    resources:
+      requests:
+        cpu: 250m
+        memory: 1Gi
+      limits:
+        memory: 2Gi
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 25Gi
+
+    # Let Prometheus discover ServiceMonitors/PodMonitors/PrometheusRules from
+    # this repo without requiring each chart to copy Helm release labels.
+    ruleSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    probeSelectorNilUsesHelmValues: false
+    scrapeConfigSelectorNilUsesHelmValues: false
+
+    ruleNamespaceSelector: {}
+    serviceMonitorNamespaceSelector: {}
+    podMonitorNamespaceSelector: {}
+    probeNamespaceSelector: {}
+    scrapeConfigNamespaceSelector: {}
+
+defaultRules:
+  rules:
+    etcd: false
+    kubeControllerManager: false
+    kubeProxy: false
+    kubeSchedulerAlerting: false
+    kubeSchedulerRecording: false
