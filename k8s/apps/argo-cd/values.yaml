@@ -3,6 +3,14 @@
 
 global:
   domain: argo.joelmccoy.dev
+  image:
+    repository: quay.io/argoproj/argocd
+    tag: v3.3.9
+
+redis:
+  image:
+    repository: ecr-public.aws.com/docker/library/redis
+    tag: 8.2.3-alpine
 
 configs:
   params:
