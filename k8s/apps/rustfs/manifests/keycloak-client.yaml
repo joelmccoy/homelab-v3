@@ -1,0 +1,57 @@
+# Crossplane-managed OIDC Client in Keycloak homelab realm.
+# Connection Secret holds the generated client_secret; rustfs values reference
+# it via secretKeyRef in extraEnv (no part-of=argocd label needed — the label
+# trick is specific to ArgoCD's $secret:key syntax).
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: rustfs
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  providerConfigRef:
+    name: keycloak
+  forProvider:
+    realmId: homelab
+    clientId: rustfs
+    name: RustFS
+    description: RustFS object storage (console + STS)
+    enabled: true
+    accessType: CONFIDENTIAL
+    standardFlowEnabled: true
+    directAccessGrantsEnabled: false
+    serviceAccountsEnabled: false
+    # OIDC callback lives on the s3 API host under /rustfs/admin/v3/oidc/.
+    validRedirectUris:
+      - https://s3.joelmccoy.dev/rustfs/admin/v3/oidc/callback/keycloak
+    validPostLogoutRedirectUris:
+      - https://s3-console.joelmccoy.dev/*
+      - https://s3.joelmccoy.dev/*
+    webOrigins:
+      - https://s3-console.joelmccoy.dev
+      - https://s3.joelmccoy.dev
+  writeConnectionSecretToRef:
+    name: rustfs-keycloak-client
+    namespace: rustfs
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientDefaultScopes
+metadata:
+  name: rustfs
+  annotations:
+    argocd.argoproj.io/sync-wave: "21"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  providerConfigRef:
+    name: keycloak
+  forProvider:
+    realmId: homelab
+    clientIdRef:
+      name: rustfs
+    defaultScopes:
+      - profile
+      - email
+      - roles
+      - web-origins
+      - groups

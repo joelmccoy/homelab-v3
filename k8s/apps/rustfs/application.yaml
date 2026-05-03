@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rustfs
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: default
+  sources:
+    - repoURL: https://charts.rustfs.com
+      chart: rustfs
+      targetRevision: 0.1.0
+      helm:
+        releaseName: rustfs
+        valueFiles:
+          - $values/k8s/apps/rustfs/values.yaml
+    - repoURL: https://github.com/joelmccoy/homelab-v3.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://github.com/joelmccoy/homelab-v3.git
+      targetRevision: main
+      path: k8s/apps/rustfs/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: rustfs
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true

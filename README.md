@@ -75,6 +75,7 @@ plain manifests, or both.
 | ![cloudflared](https://img.shields.io/badge/cloudflared-F38020?style=flat-square&logo=cloudflare&logoColor=white) | cloudflared | Outbound-only tunnel from the cluster to Cloudflare's edge. | [`k8s/apps/cloudflared/`](k8s/apps/cloudflared/) | [Docs](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) |
 | ![external-dns](https://img.shields.io/badge/external--dns-326CE5?style=flat-square&logo=kubernetes&logoColor=white) | external-dns | Watches Gateway API routes and manages Cloudflare DNS records. | [`k8s/apps/external-dns/`](k8s/apps/external-dns/) | [Docs](https://github.com/kubernetes-sigs/external-dns) |
 | ![Longhorn](https://img.shields.io/badge/Longhorn-6D4AFF?style=flat-square) | Longhorn | Distributed Kubernetes block storage and default StorageClass. | [`k8s/apps/longhorn/`](k8s/apps/longhorn/) | [Docs](https://longhorn.io/docs/) |
+| ![RustFS](https://img.shields.io/badge/RustFS-CE422B?style=flat-square&logo=rust&logoColor=white) | RustFS | In-cluster S3-compatible object storage (Rust). Backs Loki and future Velero, with built-in admin console + Keycloak SSO. | [`k8s/apps/rustfs/`](k8s/apps/rustfs/) | [Docs](https://docs.rustfs.com/) |
 | ![Sealed Secrets](https://img.shields.io/badge/Sealed%20Secrets-326CE5?style=flat-square&logo=kubernetes&logoColor=white) | Sealed Secrets | Stores encrypted Kubernetes Secrets safely in git. | [`k8s/apps/sealed-secrets/`](k8s/apps/sealed-secrets/) | [Docs](https://github.com/bitnami-labs/sealed-secrets) |
 | ![Prometheus](https://img.shields.io/badge/kube--prometheus--stack-E6522C?style=flat-square&logo=prometheus&logoColor=white) | kube-prometheus-stack | Monitoring foundation chart for Prometheus Operator and its standard Kubernetes exporters. | [`k8s/apps/monitoring/`](k8s/apps/monitoring/) | [Chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) |
 | ![Prometheus Operator](https://img.shields.io/badge/Prometheus%20Operator-E6522C?style=flat-square&logo=prometheus&logoColor=white) | Prometheus Operator | Manages Prometheus, Alertmanager, ServiceMonitor, and PrometheusRule custom resources. | [`k8s/apps/monitoring/values.yaml`](k8s/apps/monitoring/values.yaml) | [Docs](https://prometheus-operator.dev/) |
@@ -97,6 +98,8 @@ plain manifests, or both.
 | [`argo.joelmccoy.dev`](https://argo.joelmccoy.dev) | Argo CD | GitOps UI and operational dashboard. |
 | [`sso.joelmccoy.dev`](https://sso.joelmccoy.dev) | Keycloak | OIDC identity provider; serves the `homelab` realm. |
 | [`mealie.joelmccoy.dev`](https://mealie.joelmccoy.dev) | Mealie | Recipe manager, meal planner, and shopping list app. |
+| [`s3.joelmccoy.dev`](https://s3.joelmccoy.dev) | RustFS | S3 API endpoint for in-cluster object storage. |
+| [`s3-console.joelmccoy.dev`](https://s3-console.joelmccoy.dev) | RustFS | Admin console UI for buckets and access keys. |
 | `*.joelmccoy.dev` | Istio Gateway + cert-manager | Wildcard HTTPS listener for future homelab services. |
 
 ## Operating model

@@ -1,0 +1,78 @@
+# Idempotent bucket bootstrap. Runs as ArgoCD PostSync hook so it fires after
+# the rustfs StatefulSet is healthy. Creates the loki-chunks bucket if missing
+# (mb is a no-op when the bucket already exists per AWS CLI semantics).
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rustfs-loki-bucket-init
+  namespace: rustfs
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded,HookFailed
+spec:
+  activeDeadlineSeconds: 300
+  ttlSecondsAfterFinished: 600
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: OnFailure
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: aws-cli
+          image: amazon/aws-cli:2.31.32
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
+          envFrom:
+            - secretRef:
+                name: rustfs-credentials
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: rustfs-credentials
+                  key: RUSTFS_ACCESS_KEY
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rustfs-credentials
+                  key: RUSTFS_SECRET_KEY
+            - name: AWS_REGION
+              value: us-east-1
+            - name: ENDPOINT
+              value: http://rustfs:9000
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              for i in $(seq 1 60); do
+                if aws --endpoint-url "$ENDPOINT" s3 ls >/dev/null 2>&1; then break; fi
+                echo "waiting for rustfs S3 endpoint ($i/60)..."
+                sleep 5
+              done
+              # mb is idempotent enough for our purposes — succeeds if absent,
+              # returns BucketAlreadyOwnedByYou (which we tolerate) if present.
+              aws --endpoint-url "$ENDPOINT" s3 mb s3://loki-chunks 2>&1 | \
+                tee /tmp/mb.log || grep -q 'BucketAlreadyOwnedByYou\|already exists' /tmp/mb.log
+              echo "bucket loki-chunks ready"
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              memory: 128Mi
+      volumes:
+        - name: tmp
+          emptyDir: {}

@@ -1,0 +1,57 @@
+# RustFS helm values.
+
+mode:
+  standalone:
+    enabled: true
+  distributed:
+    # Distributed mode is "under testing" per upstream feature matrix; stay on
+    # standalone until RustFS GA. Longhorn replicates the PVC across nodes,
+    # so storage durability is preserved even with a single rustfs pod.
+    enabled: false
+
+# Admin credentials sourced from sealed-secret (manifests/credentials-sealed-secret.yaml).
+secret:
+  existingSecret: rustfs-credentials
+
+storageclass:
+  name: longhorn
+  dataStorageSize: 50Gi
+  logStorageSize: 5Gi
+
+# Chart's built-in Ingress + GatewayApi resources point at nginx/traefik;
+# we wire our own HTTPRoute against the existing istio-gateway.
+ingress:
+  enabled: false
+
+# OIDC SSO via Keycloak — client created/managed by Crossplane; the connection
+# Secret carries the generated client_secret. Blanket consoleAdmin policy is fine
+# because the homelab realm only contains members of the admins group.
+extraEnv:
+  - name: RUSTFS_IDENTITY_OPENID_CONFIG_URL_KEYCLOAK
+    value: https://sso.joelmccoy.dev/realms/homelab/.well-known/openid-configuration
+  - name: RUSTFS_IDENTITY_OPENID_CLIENT_ID_KEYCLOAK
+    value: rustfs
+  - name: RUSTFS_IDENTITY_OPENID_CLIENT_SECRET_KEYCLOAK
+    valueFrom:
+      secretKeyRef:
+        name: rustfs-keycloak-client
+        key: attribute.client_secret
+  - name: RUSTFS_IDENTITY_OPENID_SCOPES_KEYCLOAK
+    value: "openid,profile,email,groups"
+  - name: RUSTFS_IDENTITY_OPENID_DISPLAY_NAME_KEYCLOAK
+    value: Keycloak
+  - name: RUSTFS_IDENTITY_OPENID_REDIRECT_URI_KEYCLOAK
+    value: https://s3.joelmccoy.dev/rustfs/admin/v3/oidc/callback/keycloak
+  - name: RUSTFS_IDENTITY_OPENID_ROLE_POLICY_KEYCLOAK
+    value: consoleAdmin
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 1Gi
+
+pdb:
+  create: true
+  maxUnavailable: 1

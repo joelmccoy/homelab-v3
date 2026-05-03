@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rustfs
+  annotations:
+    argocd.argoproj.io/sync-wave: "-100"
+  labels:
+    app.kubernetes.io/name: rustfs
+    istio.io/dataplane-mode: ambient

@@ -143,6 +143,11 @@
       "groupName": "monitoring dependencies"
     },
     {
+      "description": "Group RustFS app dependencies.",
+      "matchFileNames": ["k8s/apps/rustfs/**"],
+      "groupName": "rustfs dependencies"
+    },
+    {
       "description": "Group sealed-secrets app dependencies.",
       "matchFileNames": ["k8s/apps/sealed-secrets/**"],
       "groupName": "sealed-secrets dependencies"
