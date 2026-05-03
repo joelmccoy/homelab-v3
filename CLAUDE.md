@@ -26,7 +26,7 @@ Four things happen together — never one without the others:
 
 Skipping any of the four is a half-finished change.
 
-When using a Helm chart, prefer chart-managed image defaults unless there is a clear reason to decouple image updates from chart updates. If you intentionally pin image repositories/tags in `values.yaml`, use the chart's normal `image.repository` / `image.tag` shape where possible so Renovate's `helm-values` manager can bump them, and validate the rendered manifests before merging.
+When using a Helm chart, pin the chart's image repositories/tags in `values.yaml` when the chart exposes stable image fields, using the chart's normal `image.repository` / `image.tag` shape where possible so Renovate's `helm-values` manager can bump them. Keep the initial pin aligned with the chart's current default image to avoid accidental rollout changes, and validate the rendered manifests before merging.
 
 ## Where to look
 
