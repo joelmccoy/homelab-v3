@@ -32,6 +32,6 @@ policy: sync   # create/update/delete records to match cluster state
 # the request and route it to the tunnel based on Host header. With gray-cloud
 # DNS-only, cfargotunnel.com doesn't resolve to a usable IP and traffic dies.
 extraArgs:
-  - --cf-proxied
+  - --cloudflare-proxied
 
 logLevel: info
