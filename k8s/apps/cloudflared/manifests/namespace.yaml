@@ -4,5 +4,6 @@ metadata:
   name: cloudflared
   annotations:
     argocd.argoproj.io/sync-wave: "-100"
-  labels:
-    istio.io/dataplane-mode: ambient
+  labels: {}
+  # NOT meshed: cloudflared talks QUIC outbound to CF edge + plain to istio-gateway.
+  # Mesh adds zero value here and breaks the kubelet liveness probe on first boot.

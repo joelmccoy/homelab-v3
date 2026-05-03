@@ -1,0 +1,35 @@
+# external-dns helm values.
+# Watches Gateway/HTTPRoute resources, writes CNAMEs to Cloudflare.
+
+provider:
+  name: cloudflare
+
+# Watch Gateway API resources cluster-wide.
+sources:
+  - gateway-httproute
+  - gateway-grpcroute
+
+# CF API token via secret env var.
+env:
+  - name: CF_API_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: cloudflare-api-token
+        key: api-token
+
+# Only manage records under this zone.
+domainFilters:
+  - joelmccoy.dev
+
+# How records are owned (TXT registry).
+registry: txt
+txtOwnerId: homelab
+txtPrefix: external-dns-
+
+policy: sync   # create/update/delete records to match cluster state
+
+# CNAME to <tunnel>.cfargotunnel.com — DNS-only (proxy=false), CF Tunnel handles edge.
+extraArgs:
+  - --cloudflare-proxied=false
+
+logLevel: info
