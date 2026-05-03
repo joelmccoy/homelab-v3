@@ -4,6 +4,10 @@
 ipam:
   mode: kubernetes
 
+# Don't kick other CNI plugins (Istio Ambient) out of the conflist chain.
+cni:
+  exclusive: false
+
 kubeProxyReplacement: true
 
 # Talos exposes the kube-apiserver on every node at localhost:7445 (apid forwards).
