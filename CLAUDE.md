@@ -17,13 +17,16 @@ Personal homelab. Talos Kubernetes on Proxmox; OpenTofu provisions infra and Clo
 
 ## When adding a new app/component
 
-Three things happen together — never one without the others:
+Four things happen together — never one without the others:
 
 1. **Implement it** under `k8s/apps/<name>/` following the existing pattern (`application.yaml` + `manifests/` + optional `values.yaml`). New namespace? Include a `manifests/namespace.yaml` with the `istio.io/dataplane-mode: ambient` label unless there's a reason not to (mesh-incompat workload).
 2. **Capture every non-trivial choice as an ADR.** Tool selection (chart vs operator), data model, integration shape — anything the next person would otherwise have to reverse-engineer from yaml. Brief format. Use `mise run adr-new <kebab-title>`.
-3. **Update `README.md`** — add a row to the relevant table (`Platform building blocks` for infra, `GitOps apps` for cluster components). Keep the badge style consistent with existing rows.
+3. **Update Renovate grouping** in `renovate.json` so dependency PRs for the new app land in a logical group. If it is support/dev tooling rather than a runtime app, group it under `support dependencies`.
+4. **Update `README.md`** — add a row to the relevant table (`Platform building blocks` for infra, `GitOps apps` for cluster components). Keep the badge style consistent with existing rows.
 
-Skipping any of the three is a half-finished change.
+Skipping any of the four is a half-finished change.
+
+When using a Helm chart, pin the chart's image repositories/tags in `values.yaml` when the chart exposes stable image fields, using the chart's normal `image.repository` / `image.tag` shape where possible so Renovate's `helm-values` manager can bump them. Keep the initial pin aligned with the chart's current default image to avoid accidental rollout changes, and validate the rendered manifests before merging.
 
 ## Where to look
 

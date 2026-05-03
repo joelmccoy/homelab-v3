@@ -15,15 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        # actions/checkout@v4.3.1
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           # hk's gitleaks check scans git history, not just the working tree.
           fetch-depth: 0
 
       - name: Set up mise and pinned tools
-        # jdx/mise-action@v2.4.4
-        uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac
+        uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
         with:
           install: true
           cache: true
