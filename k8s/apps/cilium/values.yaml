@@ -1,6 +1,19 @@
 # Cilium helm values for Talos.
 # Single source: consumed by scripts/bootstrap.sh and by k8s/apps/cilium/application.yaml.
 
+image:
+  repository: quay.io/cilium/cilium
+  tag: v1.19.3
+  digest: sha256:2e61680593cddca8b6c055f6d4c849d87a26a1c91c7e3b8b56c7fb76ab7b7b10
+  useDigest: true
+
+envoy:
+  image:
+    repository: quay.io/cilium/cilium-envoy
+    tag: v1.36.6-1776000132-2437d2edeaf4d9b56ef279bd0d71127440c067aa
+    digest: sha256:ba0ab8adac082d50d525fd2c5ba096c8facea3a471561b7c61c7a5b9c2e0de0d
+    useDigest: true
+
 ipam:
   mode: kubernetes
 
@@ -46,11 +59,33 @@ hubble:
   enabled: true
   relay:
     enabled: true
+    image:
+      repository: quay.io/cilium/hubble-relay
+      tag: v1.19.3
+      digest: sha256:5ee21d57b6ef2aa6db67e603a735fdceb162454b352b7335b651456e308f681b
+      useDigest: true
   ui:
     enabled: true
+    backend:
+      image:
+        repository: quay.io/cilium/hubble-ui-backend
+        tag: v0.13.3
+        digest: sha256:db1454e45dc39ca41fbf7cad31eec95d99e5b9949c39daaad0fa81ef29d56953
+        useDigest: true
+    frontend:
+      image:
+        repository: quay.io/cilium/hubble-ui
+        tag: v0.13.3
+        digest: sha256:661d5de7050182d495c6497ff0b007a7a1e379648e60830dd68c4d78ae21761d
+        useDigest: true
 
 operator:
   replicas: 1
+  image:
+    repository: quay.io/cilium/operator
+    tag: v1.19.3
+    genericDigest: sha256:205b09b0ed6accbf9fe688d312a9f0fcfc6a316fc081c23fbffb472af5dd62cd
+    useDigest: true
 
 hostFirewall:
   enabled: false
