@@ -1,0 +1,13 @@
+# istio-cni: per-node CNI plugin for Ambient mode (replaces sidecar redirection).
+
+profile: ambient
+
+cni:
+  ambient:
+    enabled: true
+  # Hard-exclude only namespaces that MUST NEVER be meshed.
+  # Ambient is opt-in via `istio.io/dataplane-mode: ambient` namespace label;
+  # other namespaces stay unmeshed without listing them here.
+  excludeNamespaces:
+    - kube-system        # control plane — bootstrap-order risk
+    - longhorn-system    # host-network + iSCSI — mesh breaks volume attach

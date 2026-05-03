@@ -1,0 +1,3 @@
+# istio-base: installs Istio CRDs and shared cluster-scoped resources.
+
+defaultRevision: default

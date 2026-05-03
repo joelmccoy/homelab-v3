@@ -1,0 +1,10 @@
+# istiod: Istio control plane, Ambient profile.
+
+profile: ambient
+
+pilot:
+  env:
+    PILOT_ENABLE_AMBIENT: "true"
+
+meshConfig:
+  accessLogFile: /dev/stdout

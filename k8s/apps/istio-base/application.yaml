@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-base
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-9"
+spec:
+  project: default
+  sources:
+    - repoURL: https://istio-release.storage.googleapis.com/charts
+      chart: base
+      targetRevision: 1.29.2
+      helm:
+        releaseName: istio-base
+        valueFiles:
+          - $values/k8s/apps/istio-base/values.yaml
+    - repoURL: https://github.com/joelmccoy/homelab-v3.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://github.com/joelmccoy/homelab-v3.git
+      targetRevision: main
+      path: k8s/apps/istio-base/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true

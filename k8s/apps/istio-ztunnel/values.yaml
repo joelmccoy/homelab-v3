@@ -1,0 +1,3 @@
+# ztunnel: Ambient data plane (per-node L4 proxy).
+
+profile: ambient
