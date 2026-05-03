@@ -17,7 +17,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: keycloak-config-cli
-          image: adorsys/keycloak-config-cli:6.5.0
+          image: adorsys/keycloak-config-cli:6.5.0-26
           env:
             - name: KEYCLOAK_URL
               value: http://keycloak-service:8080
