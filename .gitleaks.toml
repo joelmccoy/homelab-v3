@@ -3,10 +3,16 @@ title = "homelab-v3 gitleaks config"
 [extend]
 useDefault = true
 
-# Sealed-secret encrypted blobs are safe to commit; they're already encrypted
-# with the in-cluster sealed-secrets controller's public key. The high-entropy
-# base64 trips generic-api-key.
-[allowlist]
+# SealedSecret ciphertext is safe to commit, but do not allowlist entire
+# SealedSecret files: that would also hide an accidental plaintext token in the
+# same file. Only ignore kubeseal ciphertext value lines.
+[[allowlists]]
+description = "Allow kubeseal ciphertext lines in SealedSecret manifests"
+condition = "AND"
+regexTarget = "line"
 paths = [
   '''.*-sealed-secret\.yaml$''',
+]
+regexes = [
+  '''^\s+[A-Za-z0-9_.-]+:\s+Ag[A-Za-z0-9+/=]+$''',
 ]
