@@ -4,6 +4,35 @@
 crds:
   enabled: true
 
+prometheusOperator:
+  image:
+    registry: quay.io
+    repository: prometheus-operator/prometheus-operator
+    tag: v0.90.1
+  prometheusConfigReloader:
+    image:
+      registry: quay.io
+      repository: prometheus-operator/prometheus-config-reloader
+      tag: v0.90.1
+  admissionWebhooks:
+    patch:
+      image:
+        registry: ghcr.io
+        repository: jkroepke/kube-webhook-certgen
+        tag: 1.8.2
+
+kube-state-metrics:
+  image:
+    registry: registry.k8s.io
+    repository: kube-state-metrics/kube-state-metrics
+    tag: v2.18.0
+
+prometheus-node-exporter:
+  image:
+    registry: quay.io
+    repository: prometheus/node-exporter
+    tag: v1.11.1
+
 # Cilium is running with kube-proxy replacement, so kube-proxy targets and rules
 # would be permanently absent/noisy.
 kubeProxy:
@@ -30,6 +59,10 @@ grafana:
 alertmanager:
   enabled: true
   alertmanagerSpec:
+    image:
+      registry: quay.io
+      repository: prometheus/alertmanager
+      tag: v0.32.1
     replicas: 1
     retention: 120h
     storage:
@@ -44,6 +77,10 @@ alertmanager:
 prometheus:
   enabled: true
   prometheusSpec:
+    image:
+      registry: quay.io
+      repository: prometheus/prometheus
+      tag: v3.11.3
     replicas: 1
     retention: 14d
     retentionSize: 18GiB
