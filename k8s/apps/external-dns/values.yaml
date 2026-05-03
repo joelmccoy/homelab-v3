@@ -35,3 +35,7 @@ extraArgs:
   - --cloudflare-proxied
 
 logLevel: info
+
+serviceMonitor:
+  enabled: true
+  interval: 60s
