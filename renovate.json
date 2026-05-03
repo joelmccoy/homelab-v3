@@ -39,6 +39,13 @@
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker",
       "autoReplaceStringTemplate": "{{{depName}}}:{{{newValue}}}@{{#if newDigest}}{{{newDigest}}}{{else}}{{{currentDigest}}}{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "description": "Update annotated image tags in Helm values that do not use image.repository/image.tag.",
+      "managerFilePatterns": ["/^k8s/apps/.+/values\\.ya?ml$/"],
+      "matchStrings": ["#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+)\\s+depName=(?<depName>\\S+)(?:\\s+versioning=(?<versioning>[a-z-]+))?\\s+(?:[^\\n]*\\n)*(?<indentation>\\s*)tag:\\s*[\\\"]?(?<currentValue>[^\\s\\\"]+)[\\\"]?"],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}docker{{/if}}"
     }
   ],
   "packageRules": [
