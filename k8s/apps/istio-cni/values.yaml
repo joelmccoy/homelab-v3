@@ -1,5 +1,10 @@
 # istio-cni: per-node CNI plugin for Ambient mode (replaces sidecar redirection).
 
+hub: docker.io/istio
+# renovate: datasource=docker depName=docker.io/istio/install-cni versioning=docker
+tag: 1.29.2
+variant: distroless
+
 profile: ambient
 
 cni:
