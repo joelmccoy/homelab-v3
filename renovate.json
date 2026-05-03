@@ -7,7 +7,7 @@
   "dependencyDashboard": true,
   "labels": ["dependencies"],
   "timezone": "America/Chicago",
-  "schedule": ["before 5am on monday"],
+  "schedule": ["before 5am"],
   "prConcurrentLimit": 5,
   "prHourlyLimit": 2,
   "minimumReleaseAge": "2 days",
