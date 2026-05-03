@@ -43,8 +43,9 @@ notifications:
         Application {{.app.metadata.name}} is synced and healthy.
         Revision: {{.app.status.operationState.syncResult.revision}}
       github:
-        repoURLPath: "{{.app.spec.source.repoURL}}"
-        revisionPath: "{{.app.status.operationState.syncResult.revision}}"
+        # Multi-source apps: sources[1] is the ref:values git source pointing at our repo.
+        repoURLPath: "{{(index .app.spec.sources 1).repoURL}}"
+        revisionPath: "{{(index .app.status.operationState.syncResult.revisions 1)}}"
         status:
           state: success
           label: "argocd/{{.app.metadata.name}}"
@@ -53,8 +54,9 @@ notifications:
       message: |
         Sync failed for {{.app.metadata.name}}: {{.app.status.operationState.message}}
       github:
-        repoURLPath: "{{.app.spec.source.repoURL}}"
-        revisionPath: "{{.app.status.operationState.syncResult.revision}}"
+        # Multi-source apps: sources[1] is the ref:values git source pointing at our repo.
+        repoURLPath: "{{(index .app.spec.sources 1).repoURL}}"
+        revisionPath: "{{(index .app.status.operationState.syncResult.revisions 1)}}"
         status:
           state: failure
           label: "argocd/{{.app.metadata.name}}"
@@ -63,8 +65,9 @@ notifications:
       message: |
         Syncing {{.app.metadata.name}}.
       github:
-        repoURLPath: "{{.app.spec.source.repoURL}}"
-        revisionPath: "{{.app.status.operationState.syncResult.revision}}"
+        # Multi-source apps: sources[1] is the ref:values git source pointing at our repo.
+        repoURLPath: "{{(index .app.spec.sources 1).repoURL}}"
+        revisionPath: "{{(index .app.status.operationState.syncResult.revisions 1)}}"
         status:
           state: pending
           label: "argocd/{{.app.metadata.name}}"
