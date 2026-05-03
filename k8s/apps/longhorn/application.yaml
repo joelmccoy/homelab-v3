@@ -18,6 +18,9 @@ spec:
     - repoURL: https://github.com/joelmccoy/homelab-v3.git
       targetRevision: main
       ref: values
+    - repoURL: https://github.com/joelmccoy/homelab-v3.git
+      targetRevision: main
+      path: k8s/apps/longhorn/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
@@ -25,11 +28,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    managedNamespaceMetadata:
-      labels:
-        # Longhorn manager needs privileged (hostPath + privileged container).
-        pod-security.kubernetes.io/enforce: privileged
-        pod-security.kubernetes.io/enforce-version: latest
     syncOptions:
-      - CreateNamespace=true
       - ServerSideApply=true

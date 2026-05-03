@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: longhorn-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "-100"
+  labels:
+    # longhorn-manager DaemonSet runs privileged with hostPath volumes.
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/enforce-version: latest

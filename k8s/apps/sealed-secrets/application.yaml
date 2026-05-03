@@ -18,9 +18,12 @@ spec:
     - repoURL: https://github.com/joelmccoy/homelab-v3.git
       targetRevision: main
       ref: values
+    - repoURL: https://github.com/joelmccoy/homelab-v3.git
+      targetRevision: main
+      path: k8s/apps/sealed-secrets/manifests
   destination:
     server: https://kubernetes.default.svc
-    namespace: kube-system
+    namespace: sealed-secrets
   syncPolicy:
     automated:
       prune: true
