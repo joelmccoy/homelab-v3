@@ -28,7 +28,10 @@ txtPrefix: external-dns-
 
 policy: sync   # create/update/delete records to match cluster state
 
-# CF proxy mode (orange cloud) is OFF by default; CF Tunnel handles edge.
-# To enable per-record proxy, add `external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"` annotation.
+# CF Tunnel REQUIRES proxied (orange cloud) records — CF edge has to terminate
+# the request and route it to the tunnel based on Host header. With gray-cloud
+# DNS-only, cfargotunnel.com doesn't resolve to a usable IP and traffic dies.
+extraArgs:
+  - --cf-proxied
 
 logLevel: info
