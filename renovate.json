@@ -121,6 +121,11 @@
       "groupName": "longhorn dependencies"
     },
     {
+      "description": "Group metrics-server app dependencies.",
+      "matchFileNames": ["k8s/apps/metrics-server/**"],
+      "groupName": "metrics-server dependencies"
+    },
+    {
       "description": "Group monitoring stack dependencies.",
       "matchFileNames": ["k8s/apps/monitoring/**"],
       "groupName": "monitoring dependencies"
