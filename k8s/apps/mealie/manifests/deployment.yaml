@@ -18,7 +18,13 @@ spec:
         app.kubernetes.io/name: mealie
     spec:
       securityContext:
-        fsGroup: 1000
+        # Run as Mealie's built-in non-root `abc` user. The entrypoint skips
+        # its root-only chown/gosu path when the current UID matches PUID.
+        runAsUser: 911
+        runAsGroup: 911
+        runAsNonRoot: true
+        fsGroup: 911
+        fsGroupChangePolicy: OnRootMismatch
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -31,9 +37,9 @@ spec:
             - name: TZ
               value: America/Chicago
             - name: PUID
-              value: "1000"
+              value: "911"
             - name: PGID
-              value: "1000"
+              value: "911"
             - name: BASE_URL
               value: https://mealie.joelmccoy.dev
             - name: API_DOCS
