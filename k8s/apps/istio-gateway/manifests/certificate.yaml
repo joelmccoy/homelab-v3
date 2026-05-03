@@ -1,16 +1,15 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: wildcard-joelmccoy-dev
+  name: wildcard-lab-joelmccoy-dev
   namespace: istio-ingress
   annotations:
     argocd.argoproj.io/sync-wave: "0"
 spec:
-  # Resulting Secret read by the Gateway listener below.
-  secretName: wildcard-joelmccoy-dev-tls
+  secretName: wildcard-lab-joelmccoy-dev-tls
   issuerRef:
     kind: ClusterIssuer
-    name: letsencrypt-staging   # flip to letsencrypt-prod after staging issuance verified
+    name: letsencrypt-prod
   dnsNames:
-    - "joelmccoy.dev"
-    - "*.joelmccoy.dev"
+    - "lab.joelmccoy.dev"
+    - "*.lab.joelmccoy.dev"

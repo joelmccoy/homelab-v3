@@ -19,7 +19,10 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
       {
         service = "https://istio-gateway-istio.istio-ingress.svc.cluster.local:443"
         origin_request = {
-          no_tls_verify = true
+          # Wildcard cert is for *.joelmccoy.dev — pick any subdomain for SNI.
+          # Host header is preserved separately, so HTTPRoute routing isn't affected.
+          origin_server_name = "gateway.lab.joelmccoy.dev"
+          no_tls_verify      = true
         }
       },
     ]
