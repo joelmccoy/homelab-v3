@@ -5,7 +5,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: keycloak-realm-config
-  namespace: keycloak
+  namespace: keycloak-system
   annotations:
     argocd.argoproj.io/sync-wave: "10"
 data:

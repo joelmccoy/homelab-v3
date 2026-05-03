@@ -9,11 +9,11 @@ metadata:
     argocd.argoproj.io/sync-wave: "10"
 spec:
   endpoint:
-    url: http://keycloak-service.keycloak.svc.cluster.local:8080
+    url: http://keycloak-service.keycloak-system.svc.cluster.local:8080
     base_path: ""
   credentials:
     source: Secret
     secretRef:
-      namespace: keycloak
+      namespace: keycloak-system
       name: keycloak-crossplane-credentials
       key: credentials   # JSON: {"client_id":"admin-cli","username":"admin","password":"...","realm":"master"}
