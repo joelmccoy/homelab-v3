@@ -18,6 +18,7 @@ fronted by Cloudflare Tunnel, and managed through small GitOps changes.
 | Current phase docs | [`docs/superpowers/`](docs/superpowers/) |
 | Terraform/OpenTofu | [`tofu/`](tofu/) |
 | Argo CD UI | [`argo.joelmccoy.dev`](https://argo.joelmccoy.dev) |
+| Mealie | [`mealie.joelmccoy.dev`](https://mealie.joelmccoy.dev) |
 
 ## Architecture at a glance
 
@@ -87,6 +88,7 @@ plain manifests, or both.
 | ![Keycloak](https://img.shields.io/badge/Keycloak%20Operator-EA002C?style=flat-square&logo=keycloak&logoColor=white) | Keycloak operator | Manages Keycloak instance lifecycle via the `Keycloak` CR. | [`k8s/apps/keycloak-operator/`](k8s/apps/keycloak-operator/) | [Docs](https://www.keycloak.org/operator/installation) |
 | ![Keycloak](https://img.shields.io/badge/Keycloak-EA002C?style=flat-square&logo=keycloak&logoColor=white) | Keycloak | OIDC identity provider for cluster apps. Realm-level config via `keycloak-config-cli` PostSync hook; per-app clients via Crossplane `Client` CRs. | [`k8s/apps/keycloak/`](k8s/apps/keycloak/) | [Docs](https://www.keycloak.org/documentation) |
 | ![provider-keycloak](https://img.shields.io/badge/provider--keycloak-7F7FFF?style=flat-square) | provider-keycloak | Crossplane provider that reconciles Keycloak realms, clients, users via admin API. | [`k8s/apps/crossplane-providers/`](k8s/apps/crossplane-providers/) | [Docs](https://github.com/crossplane-contrib/provider-keycloak) |
+| ![Mealie](https://img.shields.io/badge/Mealie-Recipe%20Manager-E58325?style=flat-square) | Mealie | Recipe manager, meal planner, and shopping list app with Keycloak SSO. | [`k8s/apps/mealie/`](k8s/apps/mealie/) | [Docs](https://docs.mealie.io/) |
 
 ## Public routes
 
@@ -94,6 +96,7 @@ plain manifests, or both.
 | --- | --- | --- |
 | [`argo.joelmccoy.dev`](https://argo.joelmccoy.dev) | Argo CD | GitOps UI and operational dashboard. |
 | [`sso.joelmccoy.dev`](https://sso.joelmccoy.dev) | Keycloak | OIDC identity provider; serves the `homelab` realm. |
+| [`mealie.joelmccoy.dev`](https://mealie.joelmccoy.dev) | Mealie | Recipe manager, meal planner, and shopping list app. |
 | `*.joelmccoy.dev` | Istio Gateway + cert-manager | Wildcard HTTPS listener for future homelab services. |
 
 ## Operating model
