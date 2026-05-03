@@ -7,6 +7,9 @@ metadata:
   name: keycloak
   annotations:
     argocd.argoproj.io/sync-wave: "10"
+    # CRD only exists after the Provider above has downloaded its pkg.
+    # Skip dry-run so first-sync doesn't abort before Provider lands.
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   endpoint:
     url: http://keycloak-service.keycloak-system.svc.cluster.local:8080
