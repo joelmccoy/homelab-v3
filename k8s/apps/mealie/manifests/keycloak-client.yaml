@@ -22,9 +22,11 @@ spec:
     serviceAccountsEnabled: false
     pkceCodeChallengeMethod: S256
     validRedirectUris:
-      - https://mealie.joelmccoy.dev/login*
+      - https://mealie.joelmccoy.dev/login
+      - https://mealie.joelmccoy.dev/login?direct=1
     validPostLogoutRedirectUris:
-      - https://mealie.joelmccoy.dev/login*
+      - https://mealie.joelmccoy.dev/login
+      - https://mealie.joelmccoy.dev/login?direct=1
     webOrigins:
       - https://mealie.joelmccoy.dev
     rootUrl: https://mealie.joelmccoy.dev
@@ -47,6 +49,4 @@ spec:
     defaultScopes:
       - profile
       - email
-      - roles
-      - web-origins
       - groups
