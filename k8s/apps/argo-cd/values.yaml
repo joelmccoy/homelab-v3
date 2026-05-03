@@ -10,6 +10,25 @@ configs:
   cm:
     application.resourceTrackingMethod: annotation
     timeout.reconciliation: 60s
+    url: https://argo.joelmccoy.dev
+    # OIDC via Keycloak homelab realm. clientSecret pulled from the Crossplane
+    # connection Secret (a Job in manifests/ adds the part-of=argocd label so
+    # ArgoCD will resolve `$secret-name:key`).
+    oidc.config: |
+      name: Keycloak
+      issuer: https://sso.joelmccoy.dev/realms/homelab
+      clientID: argocd
+      clientSecret: $argocd-keycloak-client:attribute.client_secret
+      requestedScopes: ["openid", "profile", "email", "groups"]
+      requestedIDTokenClaims:
+        groups:
+          essential: true
+  rbac:
+    # Empty default → unmapped users get no role (login allowed but 403 on resources).
+    policy.default: ""
+    scopes: "[groups]"
+    policy.csv: |
+      g, admins, role:admin
   secret:
     # We provide argocd-secret entirely via SealedSecret in manifests/.
     createSecret: false

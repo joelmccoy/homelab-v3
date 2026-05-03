@@ -44,6 +44,15 @@ spec:
               value: no-delete
             - name: IMPORT_MANAGED_GROUP
               value: no-delete
+            # Don't nuke built-in scopes (email, profile, roles, web-origins…).
+            - name: IMPORT_MANAGED_CLIENT_SCOPE
+              value: no-delete
+            # User credentials sourced from sealed secret; substituted via $(env:...) in realm yaml.
+            - name: KEYCLOAK_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-realm-users
+                  key: KEYCLOAK_USER_PASSWORD
           volumeMounts:
             - name: realm-config
               mountPath: /config

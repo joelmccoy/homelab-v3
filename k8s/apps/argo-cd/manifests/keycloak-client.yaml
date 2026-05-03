@@ -1,0 +1,57 @@
+# Crossplane-managed OIDC Client in Keycloak homelab realm.
+# provider-keycloak generates the client_secret and writes it to a connection
+# Secret in the argocd namespace; ArgoCD references it via $:key in argocd-cm.
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: argocd
+  annotations:
+    # ProviderConfig + KC must be healthy before this can reconcile.
+    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  providerConfigRef:
+    name: keycloak
+  forProvider:
+    realmId: homelab
+    clientId: argocd
+    name: ArgoCD
+    description: ArgoCD homelab UI + CLI
+    enabled: true
+    accessType: CONFIDENTIAL
+    standardFlowEnabled: true
+    directAccessGrantsEnabled: false
+    serviceAccountsEnabled: false
+    validRedirectUris:
+      - https://argo.joelmccoy.dev/auth/callback
+      - http://localhost:8085/auth/callback
+    webOrigins:
+      - https://argo.joelmccoy.dev
+    rootUrl: https://argo.joelmccoy.dev
+    baseUrl: /applications
+  writeConnectionSecretToRef:
+    name: argocd-keycloak-client
+    namespace: argocd
+---
+# Attaches the realm-level `groups` clientScope to the argocd client so the ID
+# token includes the `groups` claim that ArgoCD's RBAC (g, /admins, role:admin) maps.
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientDefaultScopes
+metadata:
+  name: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "21"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  providerConfigRef:
+    name: keycloak
+  forProvider:
+    realmId: homelab
+    clientIdRef:
+      name: argocd
+    defaultScopes:
+      - profile
+      - email
+      - roles
+      - web-origins
+      - groups

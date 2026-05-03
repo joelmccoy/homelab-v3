@@ -20,8 +20,51 @@ data:
     ssoSessionIdleTimeout: 28800
     ssoSessionMaxLifespan: 86400
     passwordPolicy: "length(12) and notUsername and digits(1) and specialChars(1)"
+    # `groups` claim required for ArgoCD (and other apps) RBAC mapping.
+    # full.path=false → emits `admins` not `/admins` so RBAC csv stays tidy.
+    clientScopes:
+      - name: groups
+        protocol: openid-connect
+        attributes:
+          include.in.token.scope: "true"
+          display.on.consent.screen: "false"
+        protocolMappers:
+          - name: groups
+            protocol: openid-connect
+            protocolMapper: oidc-group-membership-mapper
+            config:
+              full.path: "false"
+              id.token.claim: "true"
+              access.token.claim: "true"
+              userinfo.token.claim: "true"
+              claim.name: groups
+    defaultDefaultClientScopes:
+      - groups
     roles:
       realm: []
-    groups: []
+    groups:
+      - name: admins
+        # realm-admin client role grants full admin of the homelab realm.
+        clientRoles:
+          realm-management:
+            - realm-admin
+    users:
+      - username: joel
+        email: nbajoel@gmail.com
+        emailVerified: true
+        enabled: true
+        firstName: Joel
+        lastName: McCoy
+        credentials:
+          - type: password
+            value: "$(env:KEYCLOAK_USER_PASSWORD)"
+            temporary: true
+        # First login forces password reset + TOTP enrollment.
+        # Default browser flow is Conditional-OTP — once enrolled, MFA required every login.
+        requiredActions:
+          - UPDATE_PASSWORD
+          - CONFIGURE_TOTP
+        groups:
+          - admins
     # clients managed by Crossplane Client CRs (in each app's manifests dir).
     # Don't add clients here — they'd conflict with Crossplane reconciliation.
