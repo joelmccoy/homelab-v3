@@ -17,7 +17,7 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
   config = {
     ingress = [
       {
-        service = "https://istio-gateway.istio-ingress.svc.cluster.local:443"
+        service = "https://istio-gateway-istio.istio-ingress.svc.cluster.local:443"
         origin_request = {
           no_tls_verify = true
         }

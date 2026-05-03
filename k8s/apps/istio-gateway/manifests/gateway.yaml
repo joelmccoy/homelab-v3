@@ -6,6 +6,8 @@ metadata:
   annotations:
     # Apply after Certificate so the TLS secret exists when the Gateway listener references it.
     argocd.argoproj.io/sync-wave: "5"
+    # No LoadBalancer in homelab — cloudflared reaches the Service in-cluster.
+    networking.istio.io/service-type: ClusterIP
 spec:
   gatewayClassName: istio
   listeners:
