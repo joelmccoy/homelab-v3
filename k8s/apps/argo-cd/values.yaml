@@ -11,9 +11,13 @@ configs:
     application.resourceTrackingMethod: annotation
     timeout.reconciliation: 60s
     url: https://argo.joelmccoy.dev
+    # Disable local admin — auth is OIDC-only via Keycloak. Break-glass remains
+    # via in-cluster kubeconfig (`argocd login --core`).
+    admin.enabled: "false"
     # OIDC via Keycloak homelab realm. clientSecret pulled from the Crossplane
     # connection Secret (a Job in manifests/ adds the part-of=argocd label so
-    # ArgoCD will resolve `$secret-name:key`).
+    # ArgoCD will resolve `$secret-name:key`). logoutURL triggers RP-initiated
+    # logout at KC so signing out of ArgoCD also kills the KC session.
     oidc.config: |
       name: Keycloak
       issuer: https://sso.joelmccoy.dev/realms/homelab
@@ -23,6 +27,7 @@ configs:
       requestedIDTokenClaims:
         groups:
           essential: true
+      logoutURL: https://sso.joelmccoy.dev/realms/homelab/protocol/openid-connect/logout?id_token_hint={{token}}&post_logout_redirect_uri={{logoutRedirectURL}}
   rbac:
     # Empty default → unmapped users get no role (login allowed but 403 on resources).
     policy.default: ""

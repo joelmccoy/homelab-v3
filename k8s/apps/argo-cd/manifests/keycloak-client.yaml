@@ -25,6 +25,10 @@ spec:
     validRedirectUris:
       - https://argo.joelmccoy.dev/auth/callback
       - http://localhost:8085/auth/callback
+    # Required so KC accepts the post_logout_redirect_uri sent by ArgoCD on SLO.
+    validPostLogoutRedirectUris:
+      - https://argo.joelmccoy.dev/login
+      - https://argo.joelmccoy.dev/
     webOrigins:
       - https://argo.joelmccoy.dev
     rootUrl: https://argo.joelmccoy.dev
