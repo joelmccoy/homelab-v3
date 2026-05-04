@@ -138,6 +138,11 @@
       "groupName": "mealie dependencies"
     },
     {
+      "description": "Group Kaneo app dependencies.",
+      "matchFileNames": ["k8s/apps/kaneo/**"],
+      "groupName": "kaneo dependencies"
+    },
+    {
       "description": "Group monitoring stack dependencies.",
       "matchFileNames": ["k8s/apps/monitoring/**"],
       "groupName": "monitoring dependencies"

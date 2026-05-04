@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kaneo
+  namespace: kaneo
+  labels:
+    app.kubernetes.io/name: kaneo
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kaneo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kaneo
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: kaneo
+          image: ghcr.io/usekaneo/kaneo:2.7.0
+          ports:
+            - name: http
+              containerPort: 5173
+          env:
+            - name: KANEO_CLIENT_URL
+              value: https://kaneo.joelmccoy.dev
+            - name: CORS_ORIGINS
+              value: https://kaneo.joelmccoy.dev
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: kaneo-pg-app
+                  key: uri
+            # Keep the auth/session signing secret stable without committing a
+            # static secret. This reuses the Crossplane-generated Keycloak
+            # client secret until the repo has a general app-secret generator.
+            - name: AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: kaneo-keycloak-client
+                  key: attribute.client_secret
+            - name: DISABLE_GUEST_ACCESS
+              value: "true"
+            - name: DISABLE_PASSWORD_REGISTRATION
+              value: "true"
+            - name: DEVICE_AUTH_CLIENT_IDS
+              value: kaneo-cli,kaneo-mcp
+            - name: CUSTOM_OAUTH_CLIENT_ID
+              value: kaneo
+            - name: CUSTOM_OAUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: kaneo-keycloak-client
+                  key: attribute.client_secret
+            - name: CUSTOM_OAUTH_DISCOVERY_URL
+              value: https://sso.joelmccoy.dev/realms/homelab/.well-known/openid-configuration
+            - name: CUSTOM_OAUTH_SCOPES
+              value: openid,profile,email
+          startupProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 768Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL

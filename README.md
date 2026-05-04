@@ -19,6 +19,7 @@ fronted by Cloudflare Tunnel, and managed through small GitOps changes.
 | Terraform/OpenTofu | [`tofu/`](tofu/) |
 | Argo CD UI | [`argo.joelmccoy.dev`](https://argo.joelmccoy.dev) |
 | Mealie | [`mealie.joelmccoy.dev`](https://mealie.joelmccoy.dev) |
+| Kaneo | [`kaneo.joelmccoy.dev`](https://kaneo.joelmccoy.dev) |
 
 ## Architecture at a glance
 
@@ -90,6 +91,7 @@ plain manifests, or both.
 | ![Keycloak](https://img.shields.io/badge/Keycloak-EA002C?style=flat-square&logo=keycloak&logoColor=white) | Keycloak | OIDC identity provider for cluster apps. Realm-level config via `keycloak-config-cli` PostSync hook; per-app clients via Crossplane `Client` CRs. | [`k8s/apps/keycloak/`](k8s/apps/keycloak/) | [Docs](https://www.keycloak.org/documentation) |
 | ![provider-keycloak](https://img.shields.io/badge/provider--keycloak-7F7FFF?style=flat-square) | provider-keycloak | Crossplane provider that reconciles Keycloak realms, clients, users via admin API. | [`k8s/apps/crossplane-providers/`](k8s/apps/crossplane-providers/) | [Docs](https://github.com/crossplane-contrib/provider-keycloak) |
 | ![Mealie](https://img.shields.io/badge/Mealie-Recipe%20Manager-E58325?style=flat-square) | Mealie | Recipe manager, meal planner, and shopping list app with Keycloak SSO. | [`k8s/apps/mealie/`](k8s/apps/mealie/) | [Docs](https://docs.mealie.io/) |
+| ![Kaneo](https://img.shields.io/badge/Kaneo-Project%20Management-4F46E5?style=flat-square) | Kaneo | Project management and ticket tracking app with Keycloak SSO and API/MCP-friendly auth. | [`k8s/apps/kaneo/`](k8s/apps/kaneo/) | [Docs](https://kaneo.app/docs) |
 
 ## Public routes
 
@@ -98,6 +100,7 @@ plain manifests, or both.
 | [`argo.joelmccoy.dev`](https://argo.joelmccoy.dev) | Argo CD | GitOps UI and operational dashboard. |
 | [`sso.joelmccoy.dev`](https://sso.joelmccoy.dev) | Keycloak | OIDC identity provider; serves the `homelab` realm. |
 | [`mealie.joelmccoy.dev`](https://mealie.joelmccoy.dev) | Mealie | Recipe manager, meal planner, and shopping list app. |
+| [`kaneo.joelmccoy.dev`](https://kaneo.joelmccoy.dev) | Kaneo | Project management and ticket tracking. |
 | [`s3.joelmccoy.dev`](https://s3.joelmccoy.dev) | RustFS | S3 API endpoint for in-cluster object storage. |
 | [`s3-console.joelmccoy.dev`](https://s3-console.joelmccoy.dev) | RustFS | Admin console UI for buckets and access keys. |
 | `*.joelmccoy.dev` | Istio Gateway + cert-manager | Wildcard HTTPS listener for future homelab services. |
