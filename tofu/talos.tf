@@ -106,6 +106,13 @@ resource "talos_machine_configuration_apply" "controlplane" {
     }),
   ]
 
+  # Re-apply config when the VM is replaced (e.g. moved to a different Proxmox
+  # host) — without this, terraform sees no diff and leaves the new VM in
+  # maintenance mode forever.
+  lifecycle {
+    replace_triggered_by = [proxmox_virtual_environment_vm.talos[each.key]]
+  }
+
   depends_on = [proxmox_virtual_environment_vm.talos]
 }
 
@@ -123,4 +130,86 @@ resource "talos_cluster_kubeconfig" "this" {
   node                 = var.control_plane_nodes[0].ip
 
   depends_on = [talos_machine_bootstrap.this]
+}
+
+# ---------------- Workers ----------------
+
+data "talos_machine_configuration" "worker" {
+  cluster_name       = var.cluster_name
+  cluster_endpoint   = "https://${var.cluster_endpoint_ip}:6443"
+  machine_type       = "worker"
+  machine_secrets    = talos_machine_secrets.this.machine_secrets
+  kubernetes_version = var.kubernetes_version
+  talos_version      = var.talos_version
+
+  config_patches = [
+    yamlencode({
+      cluster = {
+        network = {
+          cni = { name = "none" }
+        }
+        proxy = {
+          disabled = true
+        }
+      }
+      machine = {
+        install = {
+          image = data.talos_image_factory_urls.this.urls.installer
+        }
+        kubelet = {
+          extraArgs = {
+            rotate-server-certificates = "true"
+          }
+        }
+        kernel = {
+          modules = [
+            { name = "iscsi_tcp" },
+            { name = "dm_crypt" },
+          ]
+        }
+      }
+    }),
+  ]
+}
+
+resource "talos_machine_configuration_apply" "worker" {
+  for_each = { for n in var.worker_nodes : n.name => n }
+
+  client_configuration        = talos_machine_secrets.this.client_configuration
+  machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
+  endpoint                    = each.value.ip
+  node                        = each.value.ip
+  apply_mode                  = "reboot"
+
+  config_patches = [
+    yamlencode({
+      machine = {
+        install = {
+          disk = "/dev/sda"
+        }
+        disks = [
+          {
+            device = "/dev/sdb"
+            partitions = [
+              {
+                mountpoint = "/var/mnt/longhorn-data"
+              },
+            ]
+          },
+        ]
+      }
+    }),
+  ]
+
+  # Workers join an existing bootstrapped cluster — depend on the cp bootstrap
+  # so plans during initial bring-up sequence correctly.
+  depends_on = [
+    proxmox_virtual_environment_vm.talos_worker,
+    talos_machine_bootstrap.this,
+  ]
+
+  # Re-apply when the VM is replaced (host moves, etc).
+  lifecycle {
+    replace_triggered_by = [proxmox_virtual_environment_vm.talos_worker[each.key]]
+  }
 }

@@ -63,7 +63,7 @@ variable "cluster_endpoint_ip" {
 }
 
 variable "control_plane_nodes" {
-  description = "Three combined CP+worker VMs. disk_os_gb = Talos OS + EPHEMERAL (kubelet, images, logs). disk_data_gb = dedicated Longhorn data disk."
+  description = "Three combined CP+worker VMs. disk_os_gb = Talos OS + EPHEMERAL (kubelet, images, logs). disk_data_gb = dedicated Longhorn data disk. `proxmox_node` pins a VM to a specific Proxmox host (defaults to var.proxmox_node)."
   type = list(object({
     name         = string
     cpu          = number
@@ -72,18 +72,64 @@ variable "control_plane_nodes" {
     disk_data_gb = number
     ip           = string
     gw           = string
+    proxmox_node = optional(string)
     mac          = optional(string)
     vmid         = optional(number)
   }))
   default = [
     { name = "talos-cp-0", vmid = 2000, cpu = 4, memory = 8192, disk_os_gb = 20, disk_data_gb = 70, ip = "192.168.1.50", gw = "192.168.1.254" },
-    { name = "talos-cp-1", vmid = 2001, cpu = 4, memory = 8192, disk_os_gb = 20, disk_data_gb = 70, ip = "192.168.1.51", gw = "192.168.1.254" },
-    { name = "talos-cp-2", vmid = 2002, cpu = 4, memory = 8192, disk_os_gb = 20, disk_data_gb = 70, ip = "192.168.1.52", gw = "192.168.1.254" },
+    { name = "talos-cp-1", vmid = 2001, cpu = 4, memory = 8192, disk_os_gb = 20, disk_data_gb = 70, ip = "192.168.1.51", gw = "192.168.1.254", proxmox_node = "pve2" },
+    { name = "talos-cp-2", vmid = 2002, cpu = 4, memory = 8192, disk_os_gb = 20, disk_data_gb = 70, ip = "192.168.1.52", gw = "192.168.1.254", proxmox_node = "pve3" },
   ]
   validation {
     condition     = length(var.control_plane_nodes) == 3
     error_message = "Phase 1 expects exactly 3 control-plane nodes."
   }
+}
+
+variable "worker_nodes" {
+  description = "Talos worker VMs. Each node may pin to a specific Proxmox host via `proxmox_node` (defaults to var.proxmox_node)."
+  type = list(object({
+    name         = string
+    cpu          = number
+    memory       = number
+    disk_os_gb   = number
+    disk_data_gb = number
+    ip           = string
+    gw           = string
+    proxmox_node = optional(string)
+    mac          = optional(string)
+    vmid         = optional(number)
+  }))
+  default = [
+    # Sized to fit alongside a future cp VM on pve1's 148 GiB local-lvm
+    # (cp ≈ 90 GiB + worker 50 GiB ≈ 140 GiB → 8 GiB headroom).
+    {
+      name         = "talos-w-0"
+      vmid         = 2100
+      cpu          = 4
+      memory       = 16384
+      disk_os_gb   = 20
+      disk_data_gb = 30
+      ip           = "192.168.1.53"
+      gw           = "192.168.1.254"
+      proxmox_node = "pve1"
+    },
+    # On pve (zfs0) — generous Longhorn disk so big-volume replicas (e.g. the
+    # 50 GiB and 25 GiB PVCs) have somewhere to land regardless of which cp
+    # nodes already have a copy.
+    {
+      name         = "talos-w-1"
+      vmid         = 2101
+      cpu          = 4
+      memory       = 16384
+      disk_os_gb   = 20
+      disk_data_gb = 100
+      ip           = "192.168.1.54"
+      gw           = "192.168.1.254"
+      proxmox_node = "pve"
+    },
+  ]
 }
 
 variable "talos_version" {
