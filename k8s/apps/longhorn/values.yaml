@@ -67,13 +67,16 @@ preUpgradeChecker:
 defaultSettings:
   defaultDataPath: /var/mnt/longhorn-data
   createDefaultDiskLabeledNodes: false
-  defaultReplicaCount: 2
+  # 3 replicas across distinct K8s nodes — once cp-0/cp-1/cp-2 are spread
+  # across separate Proxmox hosts (pve/pve1/pve2/pve3), every replica lands
+  # on different hardware, so any single host can fail without data loss.
+  defaultReplicaCount: 3
   replicaSoftAntiAffinity: true
   storageOverProvisioningPercentage: 200
 
 persistence:
   defaultClass: true
-  defaultClassReplicaCount: 2
+  defaultClassReplicaCount: 3
   defaultDataLocality: best-effort
   defaultFsType: ext4
 
