@@ -1,0 +1,53 @@
+# Crossplane-managed OIDC client for Kaneo.
+# Kaneo uses Better Auth's custom OAuth provider; callback path is fixed by
+# Kaneo's /api/auth base path plus the provider ID "custom".
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: kaneo
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  providerConfigRef:
+    name: keycloak
+  forProvider:
+    realmId: homelab
+    clientId: kaneo
+    name: Kaneo
+    description: Kaneo project management
+    enabled: true
+    accessType: CONFIDENTIAL
+    standardFlowEnabled: true
+    directAccessGrantsEnabled: false
+    serviceAccountsEnabled: false
+    pkceCodeChallengeMethod: S256
+    validRedirectUris:
+      - https://kaneo.joelmccoy.dev/api/auth/oauth2/callback/custom
+    validPostLogoutRedirectUris:
+      - https://kaneo.joelmccoy.dev
+    webOrigins:
+      - https://kaneo.joelmccoy.dev
+    rootUrl: https://kaneo.joelmccoy.dev
+    baseUrl: /
+  writeConnectionSecretToRef:
+    name: kaneo-keycloak-client
+    namespace: kaneo
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientDefaultScopes
+metadata:
+  name: kaneo
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  providerConfigRef:
+    name: keycloak
+  forProvider:
+    realmId: homelab
+    clientIdRef:
+      name: kaneo
+    defaultScopes:
+      - profile
+      - email

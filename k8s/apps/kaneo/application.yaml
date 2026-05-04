@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kaneo
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/joelmccoy/homelab-v3.git
+    targetRevision: main
+    path: k8s/apps/kaneo/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kaneo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
