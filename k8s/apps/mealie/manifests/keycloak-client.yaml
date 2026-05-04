@@ -7,7 +7,10 @@ kind: Client
 metadata:
   name: mealie
   annotations:
-    argocd.argoproj.io/sync-wave: "5"
+    # Wave -50: must apply (and become Ready) before the deployment so the
+    # OIDC_CLIENT_SECRET secretKeyRef has a Secret to resolve, otherwise the
+    # pod fails CreateContainerConfigError and sync deadlocks.
+    argocd.argoproj.io/sync-wave: "-50"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   providerConfigRef:
@@ -42,7 +45,8 @@ kind: ClientDefaultScopes
 metadata:
   name: mealie
   annotations:
-    argocd.argoproj.io/sync-wave: "6"
+    # One wave after Client so Crossplane has resolved the clientIdRef.
+    argocd.argoproj.io/sync-wave: "-49"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   providerConfigRef:

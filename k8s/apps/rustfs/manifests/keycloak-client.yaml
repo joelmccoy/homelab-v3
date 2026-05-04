@@ -2,12 +2,16 @@
 # Connection Secret holds the generated client_secret; rustfs values reference
 # it via secretKeyRef in extraEnv (no part-of=argocd label needed — the label
 # trick is specific to ArgoCD's $secret:key syntax).
+#
+# Wave -50: must apply (and become Ready) BEFORE the helm chart's wave-0
+# Deployment, otherwise the pod fails CreateContainerConfigError on missing
+# secret and the sync gets stuck at wave 0 — Client CR never gets applied.
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: Client
 metadata:
   name: rustfs
   annotations:
-    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-wave: "-50"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   providerConfigRef:
@@ -40,7 +44,8 @@ kind: ClientDefaultScopes
 metadata:
   name: rustfs
   annotations:
-    argocd.argoproj.io/sync-wave: "21"
+    # One wave after Client so Crossplane has resolved the clientIdRef.
+    argocd.argoproj.io/sync-wave: "-49"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   providerConfigRef:
