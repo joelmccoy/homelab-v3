@@ -21,8 +21,9 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
         origin_request = {
           # Wildcard cert is for *.joelmccoy.dev — pick any subdomain for SNI.
           # Host header is preserved separately, so HTTPRoute routing isn't affected.
+          # Keep origin TLS verification enabled; SNI makes the cert validate.
           origin_server_name = "gateway.joelmccoy.dev"
-          no_tls_verify      = true
+          no_tls_verify      = false
         }
       },
     ]
