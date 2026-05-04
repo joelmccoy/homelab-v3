@@ -22,7 +22,11 @@ spec:
       type: Static
       static: http://rustfs-svc.rustfs.svc.cluster.local:9001
     services:
-      - id: s3
+      - s3
+    # Path-style addressing requires the hostname stay fixed — without this the
+    # SDK rewrites the hostname to `<bucket>.rustfs-svc...` (virtual-hosted style).
+    hostnameImmutable: true
+    source: Custom
   s3_use_path_style: true
   skip_credentials_validation: true
   skip_metadata_api_check: true
