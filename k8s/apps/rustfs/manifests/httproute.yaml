@@ -22,7 +22,7 @@ spec:
       backendRefs:
         - group: ""
           kind: Service
-          name: rustfs
+          name: rustfs-svc
           port: 9000
           weight: 1
 ---
@@ -49,6 +49,6 @@ spec:
       backendRefs:
         - group: ""
           kind: Service
-          name: rustfs
+          name: rustfs-svc
           port: 9001
           weight: 1
