@@ -26,14 +26,12 @@ spec:
     standardFlowEnabled: true
     directAccessGrantsEnabled: false
     serviceAccountsEnabled: false
-    # OIDC callback lives on the s3 API host under /rustfs/admin/v3/oidc/.
+    # Single host serves S3 API, console UI, and admin/OIDC endpoints.
     validRedirectUris:
       - https://s3.joelmccoy.dev/rustfs/admin/v3/oidc/callback/keycloak
     validPostLogoutRedirectUris:
-      - https://s3-console.joelmccoy.dev/*
       - https://s3.joelmccoy.dev/*
     webOrigins:
-      - https://s3-console.joelmccoy.dev
       - https://s3.joelmccoy.dev
   writeConnectionSecretToRef:
     name: rustfs-keycloak-client

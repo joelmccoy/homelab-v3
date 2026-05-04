@@ -101,8 +101,7 @@ plain manifests, or both.
 | [`sso.joelmccoy.dev`](https://sso.joelmccoy.dev) | Keycloak | OIDC identity provider; serves the `homelab` realm. |
 | [`mealie.joelmccoy.dev`](https://mealie.joelmccoy.dev) | Mealie | Recipe manager, meal planner, and shopping list app. |
 | [`kaneo.joelmccoy.dev`](https://kaneo.joelmccoy.dev) | Kaneo | Project management and ticket tracking. |
-| [`s3.joelmccoy.dev`](https://s3.joelmccoy.dev) | RustFS | S3 API endpoint for in-cluster object storage. |
-| [`s3-console.joelmccoy.dev`](https://s3-console.joelmccoy.dev) | RustFS | Admin console UI for buckets and access keys. |
+| [`s3.joelmccoy.dev`](https://s3.joelmccoy.dev) | RustFS | S3 API at `/`, admin console UI at `/rustfs/console/`. |
 | `*.joelmccoy.dev` | Istio Gateway + cert-manager | Wildcard HTTPS listener for future homelab services. |
 
 ## Operating model
