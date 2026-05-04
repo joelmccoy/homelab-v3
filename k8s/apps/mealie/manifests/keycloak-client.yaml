@@ -1,5 +1,7 @@
-# Crossplane-managed public OIDC client for Mealie.
-# Mealie uses Authorization Code + PKCE and does not need a client secret.
+# Crossplane-managed OIDC client for Mealie.
+# Confidential client + PKCE: Mealie's backend exchanges the auth code for a
+# token server-side using the client_secret (a hard requirement enforced by
+# Mealie even when the IdP would accept a public client).
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: Client
 metadata:
@@ -16,7 +18,7 @@ spec:
     name: Mealie
     description: Mealie recipe manager
     enabled: true
-    accessType: PUBLIC
+    accessType: CONFIDENTIAL
     standardFlowEnabled: true
     directAccessGrantsEnabled: false
     serviceAccountsEnabled: false
@@ -31,6 +33,9 @@ spec:
       - https://mealie.joelmccoy.dev
     rootUrl: https://mealie.joelmccoy.dev
     baseUrl: /
+  writeConnectionSecretToRef:
+    name: mealie-keycloak-client
+    namespace: mealie
 ---
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientDefaultScopes

@@ -78,6 +78,11 @@ spec:
               value: https://sso.joelmccoy.dev/realms/homelab/.well-known/openid-configuration
             - name: OIDC_CLIENT_ID
               value: mealie
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: mealie-keycloak-client
+                  key: attribute.client_secret
             - name: OIDC_PROVIDER_NAME
               value: Keycloak
             - name: OIDC_USER_GROUP
