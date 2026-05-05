@@ -86,8 +86,6 @@ Suggested comment labels:
 
 ## Where to look
 
-- Current phase scope: `docs/superpowers/specs/`
-- Implementation plan: `docs/superpowers/plans/`
 - Architecture decisions: `docs/adr/`
 - Available task commands: `mise tasks`
 - One-time cluster bring-up: `docs/bootstrap.md`
