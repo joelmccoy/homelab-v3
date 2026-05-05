@@ -15,6 +15,7 @@ fronted by Cloudflare Tunnel, and managed through small GitOps changes.
 | GitOps root app | [`k8s/apps/_apps.yaml`](k8s/apps/_apps.yaml) |
 | Bootstrap notes | [`docs/bootstrap.md`](docs/bootstrap.md) |
 | Architecture decisions | [`docs/adr/`](docs/adr/) |
+| OpenClaw agent overview | [`docs/agents/`](docs/agents/) |
 | Current phase docs | [`docs/superpowers/`](docs/superpowers/) |
 | Terraform/OpenTofu | [`tofu/`](tofu/) |
 | Argo CD UI | [`argo.joelmccoy.dev`](https://argo.joelmccoy.dev) |
