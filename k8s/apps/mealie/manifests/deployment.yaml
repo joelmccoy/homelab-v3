@@ -56,7 +56,7 @@ spec:
             # OIDC auto-redirect only fires after at least one user exists.
             # DEFAULT_PASSWORD is inert: ALLOW_PASSWORD_LOGIN=false means it can never be used.
             - name: DEFAULT_EMAIL
-              value: joel@defenseunicorns.com
+              value: nbajoel@gmail.com
             - name: DEFAULT_PASSWORD
               value: disabled-oidc-only
             - name: DB_ENGINE
