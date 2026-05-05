@@ -20,7 +20,7 @@ spec:
   endpoint:
     url:
       type: Static
-      static: http://rustfs-svc.rustfs.svc.cluster.local:9001
+      static: http://rustfs-svc.rustfs.svc.cluster.local:9000
     services:
       - s3
     # Path-style addressing requires the hostname stay fixed — without this the

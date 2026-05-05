@@ -25,7 +25,7 @@ loki:
       ruler: loki-chunks
       admin: loki-chunks
     s3:
-      endpoint: rustfs-svc.rustfs.svc.cluster.local:9001
+      endpoint: rustfs-svc.rustfs.svc.cluster.local:9000
       region: us-east-1
       s3forcepathstyle: true
       insecure: true
