@@ -153,6 +153,11 @@
       "groupName": "monitoring dependencies"
     },
     {
+      "description": "Group Dozzle app dependencies.",
+      "matchFileNames": ["k8s/apps/dozzle/**"],
+      "groupName": "dozzle dependencies"
+    },
+    {
       "description": "Group RustFS app dependencies.",
       "matchFileNames": ["k8s/apps/rustfs/**"],
       "groupName": "rustfs dependencies"

@@ -1,0 +1,59 @@
+# Crossplane-managed OIDC client for oauth2-proxy in front of Dozzle.
+# Dozzle does not implement OIDC directly; it trusts auth headers from a
+# forward-auth/reverse-proxy, so oauth2-proxy handles Keycloak login and
+# passes verified identity headers to Dozzle.
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: dozzle
+  annotations:
+    # Wave -50: must apply before the deployment so oauth2-proxy's
+    # OAUTH2_PROXY_CLIENT_SECRET secretKeyRef has a Secret to resolve.
+    argocd.argoproj.io/sync-wave: "-50"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  providerConfigRef:
+    name: keycloak
+  forProvider:
+    realmId: homelab
+    clientId: dozzle
+    name: Dozzle
+    description: Dozzle realtime Kubernetes log viewer
+    enabled: true
+    accessType: CONFIDENTIAL
+    standardFlowEnabled: true
+    directAccessGrantsEnabled: false
+    serviceAccountsEnabled: false
+    pkceCodeChallengeMethod: S256
+    validRedirectUris:
+      - https://dozzle.joelmccoy.dev/oauth2/callback
+    validPostLogoutRedirectUris:
+      - https://dozzle.joelmccoy.dev
+      - https://dozzle.joelmccoy.dev/*
+    webOrigins:
+      - https://dozzle.joelmccoy.dev
+    rootUrl: https://dozzle.joelmccoy.dev
+    baseUrl: /
+  writeConnectionSecretToRef:
+    name: dozzle-keycloak-client
+    namespace: dozzle
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientDefaultScopes
+metadata:
+  name: dozzle
+  annotations:
+    # One wave after Client so Crossplane has resolved the clientIdRef.
+    argocd.argoproj.io/sync-wave: "-49"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  providerConfigRef:
+    name: keycloak
+  forProvider:
+    realmId: homelab
+    clientIdRef:
+      name: dozzle
+    defaultScopes:
+      - profile
+      - email
+      - groups

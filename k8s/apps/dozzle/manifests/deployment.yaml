@@ -1,0 +1,149 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dozzle
+  namespace: dozzle
+  labels:
+    app.kubernetes.io/name: dozzle
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dozzle
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: dozzle
+    spec:
+      serviceAccountName: dozzle
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: generate-oauth2-cookie-secret
+          image: busybox:1.37.0
+          command:
+            - sh
+            - -ec
+            - head -c 32 /dev/urandom > /cookie/cookie-secret && chmod 0444 /cookie/cookie-secret
+          volumeMounts:
+            - name: oauth2-cookie-secret
+              mountPath: /cookie
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      containers:
+        - name: oauth2-proxy
+          image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.2
+          args:
+            - --http-address=0.0.0.0:4180
+            - --provider=keycloak-oidc
+            - --client-id=dozzle
+            - --redirect-url=https://dozzle.joelmccoy.dev/oauth2/callback
+            - --oidc-issuer-url=https://sso.joelmccoy.dev/realms/homelab
+            - --email-domain=*
+            - --allowed-group=admins
+            - --code-challenge-method=S256
+            - --upstream=http://127.0.0.1:8080/
+            - --reverse-proxy=true
+            - --skip-provider-button=true
+            - --pass-user-headers=true
+            - --cookie-secret-file=/cookie/cookie-secret
+            - --cookie-secure=true
+            - --cookie-samesite=lax
+            - --cookie-name=__Host-dozzle_oauth2_proxy
+          ports:
+            - name: http
+              containerPort: 4180
+          env:
+            - name: OAUTH2_PROXY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: dozzle-keycloak-client
+                  key: attribute.client_secret
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+          volumeMounts:
+            - name: oauth2-cookie-secret
+              mountPath: /cookie
+              readOnly: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+        - name: dozzle
+          image: amir20/dozzle:v10.5.1
+          ports:
+            - name: dozzle
+              containerPort: 8080
+          env:
+            - name: DOZZLE_MODE
+              value: k8s
+            - name: DOZZLE_AUTH_PROVIDER
+              value: forward-proxy
+            - name: DOZZLE_AUTH_HEADER_USER
+              value: X-Forwarded-Preferred-Username
+            - name: DOZZLE_AUTH_HEADER_EMAIL
+              value: X-Forwarded-Email
+            - name: DOZZLE_AUTH_HEADER_NAME
+              value: X-Forwarded-User
+            - name: DOZZLE_AUTH_LOGOUT_URL
+              value: /oauth2/sign_out
+            - name: DOZZLE_ENABLE_ACTIONS
+              value: "false"
+            - name: DOZZLE_ENABLE_SHELL
+              value: "false"
+            - name: DOZZLE_NO_ANALYTICS
+              value: "true"
+          readinessProbe:
+            tcpSocket:
+              port: dozzle
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: dozzle
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: dozzle-data
+        - name: oauth2-cookie-secret
+          emptyDir:
+            medium: Memory
