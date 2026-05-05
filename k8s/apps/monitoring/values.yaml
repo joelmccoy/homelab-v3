@@ -50,11 +50,59 @@ kubeScheduler:
 kubeEtcd:
   enabled: false
 
-# Grafana is intentionally deferred until auth, exposure, and admin credential
-# handling are explicit. The Grafana chart otherwise generates an admin Secret,
-# which is awkward under deterministic GitOps rendering.
 grafana:
-  enabled: false
+  enabled: true
+  # client_secret injected from the Crossplane-managed grafana-keycloak-client Secret.
+  envValueFrom:
+    GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET:
+      secretKeyRef:
+        name: grafana-keycloak-client
+        key: attribute.client_secret
+  serviceMonitor:
+    enabled: true
+  persistence:
+    enabled: true
+    type: pvc
+    storageClassName: longhorn
+    size: 5Gi
+    accessModes: ["ReadWriteOnce"]
+  # Auto-discovered Prometheus datasource is provided by kube-prometheus-stack;
+  # Loki is added here so log queries land alongside metrics in the same UI.
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki.loki.svc.cluster.local:3100
+      isDefault: false
+      jsonData:
+        timeout: 60
+        maxLines: 1000
+  grafana.ini:
+    server:
+      root_url: https://grafana.joelmccoy.dev
+    analytics:
+      reporting_enabled: false
+      check_for_updates: false
+    auth:
+      disable_login_form: true
+    auth.anonymous:
+      enabled: false
+    auth.basic:
+      enabled: false
+    auth.generic_oauth:
+      enabled: true
+      name: Keycloak
+      allow_sign_up: true
+      client_id: grafana
+      client_secret: $__env{GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET}
+      scopes: openid profile email groups
+      auth_url: https://sso.joelmccoy.dev/realms/homelab/protocol/openid-connect/auth
+      token_url: https://sso.joelmccoy.dev/realms/homelab/protocol/openid-connect/token
+      api_url: https://sso.joelmccoy.dev/realms/homelab/protocol/openid-connect/userinfo
+      role_attribute_path: contains(groups[*], '/admins') && 'Admin' || 'Viewer'
+      role_attribute_strict: false
+    users:
+      allow_sign_up: false
 
 alertmanager:
   enabled: true

@@ -20,6 +20,7 @@ fronted by Cloudflare Tunnel, and managed through small GitOps changes.
 | Argo CD UI | [`argo.joelmccoy.dev`](https://argo.joelmccoy.dev) |
 | Mealie | [`mealie.joelmccoy.dev`](https://mealie.joelmccoy.dev) |
 | Kaneo | [`kaneo.joelmccoy.dev`](https://kaneo.joelmccoy.dev) |
+| Grafana | [`grafana.joelmccoy.dev`](https://grafana.joelmccoy.dev) |
 
 ## Architecture at a glance
 
@@ -84,6 +85,9 @@ plain manifests, or both.
 | ![Alertmanager](https://img.shields.io/badge/Alertmanager-E6522C?style=flat-square&logo=prometheus&logoColor=white) | Alertmanager | Alert routing and notification engine, installed by kube-prometheus-stack. | [`k8s/apps/monitoring/values.yaml`](k8s/apps/monitoring/values.yaml) | [Docs](https://prometheus.io/docs/alerting/latest/alertmanager/) |
 | ![node-exporter](https://img.shields.io/badge/node--exporter-E6522C?style=flat-square&logo=prometheus&logoColor=white) | node-exporter | Exposes Linux node CPU, memory, filesystem, and network metrics. | [`k8s/apps/monitoring/values.yaml`](k8s/apps/monitoring/values.yaml) | [Docs](https://github.com/prometheus/node_exporter) |
 | ![kube-state-metrics](https://img.shields.io/badge/kube--state--metrics-326CE5?style=flat-square&logo=kubernetes&logoColor=white) | kube-state-metrics | Converts Kubernetes object state into Prometheus metrics. | [`k8s/apps/monitoring/values.yaml`](k8s/apps/monitoring/values.yaml) | [Docs](https://github.com/kubernetes/kube-state-metrics) |
+| ![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white) | Grafana | Dashboard UI for Prometheus + Loki. OIDC via Keycloak; `admins` group → Admin role. Exposed at `grafana.joelmccoy.dev`. | [`k8s/apps/monitoring/values.yaml`](k8s/apps/monitoring/values.yaml) | [Docs](https://grafana.com/docs/grafana/latest/) |
+| ![Loki](https://img.shields.io/badge/Loki-F46800?style=flat-square&logo=grafana&logoColor=white) | Loki | Log aggregation in Monolithic mode, chunks on RustFS via Crossplane-provisioned bucket. | [`k8s/apps/loki/`](k8s/apps/loki/) | [Docs](https://grafana.com/docs/loki/latest/) |
+| ![Alloy](https://img.shields.io/badge/Alloy-F46800?style=flat-square&logo=grafana&logoColor=white) | Alloy | DaemonSet log shipper from K8s pods to Loki. Replaces deprecated Promtail. | [`k8s/apps/alloy/`](k8s/apps/alloy/) | [Docs](https://grafana.com/docs/alloy/latest/) |
 | ![metrics-server](https://img.shields.io/badge/metrics--server-326CE5?style=flat-square&logo=kubernetes&logoColor=white) | metrics-server | Provides the `metrics.k8s.io` API for `kubectl top` and HPA. | [`k8s/apps/metrics-server/`](k8s/apps/metrics-server/) | [Docs](https://kubernetes-sigs.github.io/metrics-server/) |
 | ![CloudNativePG](https://img.shields.io/badge/CloudNativePG-336791?style=flat-square&logo=postgresql&logoColor=white) | CloudNativePG | Postgres operator. Each app declares its own `Cluster` CR; DBs live in app namespaces. | [`k8s/apps/cnpg-operator/`](k8s/apps/cnpg-operator/) | [Docs](https://cloudnative-pg.io/) |
 | ![Crossplane](https://img.shields.io/badge/Crossplane-7F7FFF?style=flat-square&logo=crossplane&logoColor=white) | Crossplane | Universal control plane. Hosts provider-keycloak for declarative SSO clients per app. | [`k8s/apps/crossplane/`](k8s/apps/crossplane/) | [Docs](https://docs.crossplane.io/) |
@@ -101,6 +105,7 @@ plain manifests, or both.
 | [`argo.joelmccoy.dev`](https://argo.joelmccoy.dev) | Argo CD | GitOps UI and operational dashboard. |
 | [`sso.joelmccoy.dev`](https://sso.joelmccoy.dev) | Keycloak | OIDC identity provider; serves the `homelab` realm. |
 | [`mealie.joelmccoy.dev`](https://mealie.joelmccoy.dev) | Mealie | Recipe manager, meal planner, and shopping list app. |
+| [`grafana.joelmccoy.dev`](https://grafana.joelmccoy.dev) | Grafana | Metrics + logs dashboards (Prometheus + Loki datasources). |
 | [`kaneo.joelmccoy.dev`](https://kaneo.joelmccoy.dev) | Kaneo | Project management and ticket tracking. |
 | [`s3.joelmccoy.dev`](https://s3.joelmccoy.dev) | RustFS | S3 API at `/`, admin console UI at `/rustfs/console/`. |
 | `*.joelmccoy.dev` | Istio Gateway + cert-manager | Wildcard HTTPS listener for future homelab services. |

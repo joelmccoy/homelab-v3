@@ -1,0 +1,14 @@
+# Crossplane-managed S3 bucket on RustFS. Wave -50 (same pattern as Keycloak
+# Client CRs) so the bucket exists before the Loki StatefulSet tries to write.
+apiVersion: s3.aws.upbound.io/v1beta2
+kind: Bucket
+metadata:
+  name: loki-chunks
+  annotations:
+    argocd.argoproj.io/sync-wave: "-50"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  forProvider:
+    region: us-east-1
+  providerConfigRef:
+    name: rustfs

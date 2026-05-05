@@ -1,0 +1,58 @@
+# Alloy helm values — DaemonSet shipping K8s pod logs to Loki.
+# Replaces Promtail (deprecated by Grafana in 2024).
+
+controller:
+  type: daemonset
+
+alloy:
+  configMap:
+    content: |
+      // Discover all pods cluster-wide.
+      discovery.kubernetes "pods" {
+        role = "pod"
+      }
+
+      // Add useful labels (namespace, pod, container, node) before forwarding.
+      discovery.relabel "pod_logs" {
+        targets = discovery.kubernetes.pods.targets
+
+        rule {
+          source_labels = ["__meta_kubernetes_namespace"]
+          target_label  = "namespace"
+        }
+        rule {
+          source_labels = ["__meta_kubernetes_pod_name"]
+          target_label  = "pod"
+        }
+        rule {
+          source_labels = ["__meta_kubernetes_pod_container_name"]
+          target_label  = "container"
+        }
+        rule {
+          source_labels = ["__meta_kubernetes_pod_node_name"]
+          target_label  = "node"
+        }
+        rule {
+          source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+          target_label  = "app"
+        }
+      }
+
+      // Tail container log files via the kubelet API.
+      loki.source.kubernetes "pods" {
+        targets    = discovery.relabel.pod_logs.output
+        forward_to = [loki.write.default.receiver]
+      }
+
+      // Push to in-cluster Loki monolithic.
+      loki.write "default" {
+        endpoint {
+          url = "http://loki.loki.svc.cluster.local:3100/loki/api/v1/push"
+        }
+      }
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi

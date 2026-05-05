@@ -123,6 +123,11 @@
       "groupName": "keycloak dependencies"
     },
     {
+      "description": "Group Loki + Alloy log stack dependencies.",
+      "matchFileNames": ["k8s/apps/loki/**", "k8s/apps/alloy/**"],
+      "groupName": "loki dependencies"
+    },
+    {
       "description": "Group Longhorn app dependencies.",
       "matchFileNames": ["k8s/apps/longhorn/**"],
       "groupName": "longhorn dependencies"

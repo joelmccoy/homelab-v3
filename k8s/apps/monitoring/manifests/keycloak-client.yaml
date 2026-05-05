@@ -1,0 +1,52 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: grafana
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  providerConfigRef:
+    name: keycloak
+  forProvider:
+    realmId: homelab
+    clientId: grafana
+    name: Grafana
+    description: Grafana monitoring UI
+    enabled: true
+    accessType: CONFIDENTIAL
+    standardFlowEnabled: true
+    directAccessGrantsEnabled: false
+    serviceAccountsEnabled: false
+    validRedirectUris:
+      - https://grafana.joelmccoy.dev/login/generic_oauth
+    validPostLogoutRedirectUris:
+      - https://grafana.joelmccoy.dev/*
+    webOrigins:
+      - https://grafana.joelmccoy.dev
+    rootUrl: https://grafana.joelmccoy.dev
+    baseUrl: /
+  writeConnectionSecretToRef:
+    name: grafana-keycloak-client
+    namespace: monitoring
+---
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientDefaultScopes
+metadata:
+  name: grafana
+  annotations:
+    argocd.argoproj.io/sync-wave: "21"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  providerConfigRef:
+    name: keycloak
+  forProvider:
+    realmId: homelab
+    clientIdRef:
+      name: grafana
+    defaultScopes:
+      - profile
+      - email
+      - roles
+      - web-origins
+      - groups
