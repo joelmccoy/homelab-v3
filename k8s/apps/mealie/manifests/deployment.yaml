@@ -52,6 +52,13 @@ spec:
               value: "false"
             - name: ALLOW_PASSWORD_LOGIN
               value: "false"
+            # Seeds initial admin on first DB init so the setup wizard never appears.
+            # OIDC auto-redirect only fires after at least one user exists.
+            # DEFAULT_PASSWORD is inert: ALLOW_PASSWORD_LOGIN=false means it can never be used.
+            - name: DEFAULT_EMAIL
+              value: joel@defenseunicorns.com
+            - name: DEFAULT_PASSWORD
+              value: disabled-oidc-only
             - name: DB_ENGINE
               value: postgres
             - name: POSTGRES_SERVER
