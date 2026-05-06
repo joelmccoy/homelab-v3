@@ -16,7 +16,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: create-bucket
-          image: amazon/aws-cli:2.34.27
+          image: amazon/aws-cli:2.34.41
           imagePullPolicy: IfNotPresent
           env:
             - name: AWS_DEFAULT_REGION
