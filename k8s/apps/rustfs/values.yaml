@@ -42,8 +42,6 @@ extraEnv:
     value: "openid,profile,email,groups"
   - name: RUSTFS_IDENTITY_OPENID_GROUPS_CLAIM
     value: groups
-  - name: RUSTFS_IDENTITY_OPENID_ROLE_POLICY
-    value: consoleAdmin
   - name: RUSTFS_IDENTITY_OPENID_DISPLAY_NAME
     value: Keycloak
 
