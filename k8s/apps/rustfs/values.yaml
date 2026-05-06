@@ -27,23 +27,21 @@ ingress:
 # Secret carries the generated client_secret. Blanket consoleAdmin policy is fine
 # because the homelab realm only contains members of the admins group.
 extraEnv:
-  - name: RUSTFS_IDENTITY_OPENID_CONFIG_URL_KEYCLOAK
+  - name: RUSTFS_IDENTITY_OPENID_ENABLE
+    value: "true"
+  - name: RUSTFS_IDENTITY_OPENID_CONFIG_URL
     value: https://sso.joelmccoy.dev/realms/homelab/.well-known/openid-configuration
-  - name: RUSTFS_IDENTITY_OPENID_CLIENT_ID_KEYCLOAK
+  - name: RUSTFS_IDENTITY_OPENID_CLIENT_ID
     value: rustfs
-  - name: RUSTFS_IDENTITY_OPENID_CLIENT_SECRET_KEYCLOAK
+  - name: RUSTFS_IDENTITY_OPENID_CLIENT_SECRET
     valueFrom:
       secretKeyRef:
         name: rustfs-keycloak-client
         key: attribute.client_secret
-  - name: RUSTFS_IDENTITY_OPENID_SCOPES_KEYCLOAK
+  - name: RUSTFS_IDENTITY_OPENID_SCOPES
     value: "openid,profile,email,groups"
-  - name: RUSTFS_IDENTITY_OPENID_DISPLAY_NAME_KEYCLOAK
-    value: Keycloak
-  - name: RUSTFS_IDENTITY_OPENID_REDIRECT_URI_KEYCLOAK
-    value: https://s3.joelmccoy.dev/rustfs/admin/v3/oidc/callback/keycloak
-  - name: RUSTFS_IDENTITY_OPENID_ROLE_POLICY_KEYCLOAK
-    value: consoleAdmin
+  - name: RUSTFS_IDENTITY_OPENID_GROUPS_CLAIM
+    value: groups
 
 resources:
   requests:

@@ -28,7 +28,7 @@ spec:
     serviceAccountsEnabled: false
     # Single host serves S3 API, console UI, and admin/OIDC endpoints.
     validRedirectUris:
-      - https://s3.joelmccoy.dev/rustfs/admin/v3/oidc/callback/keycloak
+      - https://s3.joelmccoy.dev/*
     validPostLogoutRedirectUris:
       - https://s3.joelmccoy.dev/*
     webOrigins:
