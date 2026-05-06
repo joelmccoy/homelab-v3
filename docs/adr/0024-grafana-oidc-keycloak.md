@@ -11,7 +11,7 @@ Grafana shipped with a local admin password (SealedSecret). The rest of the home
 
 Deploy Grafana with `auth.basic.enabled = false` and `auth.disable_login_form = true`. OIDC via `auth.generic_oauth` pointing at the `homelab` Keycloak realm. The `Client` CR (`grafana`) lives in `k8s/apps/monitoring/manifests/keycloak-client.yaml`; Crossplane writes the connection Secret (`grafana-keycloak-client`) to the `monitoring` namespace. Grafana reads `attribute.client_secret` from that Secret via `envValueFrom`.
 
-Role mapping: `role_attribute_path = contains(groups[*], '/admins') && 'Admin' || 'Viewer'` — members of the `admins` Keycloak group get Grafana Admin; everyone else gets Viewer.
+Role mapping: `role_attribute_path = contains(groups[*], 'admins') && 'Admin' || 'Viewer'` — members of the `admins` Keycloak group get Grafana Admin; everyone else gets Viewer.
 
 ## Consequences
 
