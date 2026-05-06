@@ -13,6 +13,10 @@ permissions:
 jobs:
   diff:
     name: ArgoCD manifest diff preview
+    # This job renders pull-request manifests through a container with Docker socket
+    # access. Only run that heavier preview for branches in this repository, not
+    # arbitrary fork code.
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout pull request
