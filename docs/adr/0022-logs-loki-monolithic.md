@@ -9,7 +9,7 @@ We have metrics (kube-prometheus-stack) but no log aggregation — debugging mea
 
 ## Decision
 
-Deploy Loki via the new `grafana-community/loki` chart in **Monolithic** mode (`deploymentMode: Monolithic`, `singleBinary.replicas: 1`). TSDB index, S3 chunks backed by RustFS via the bucket we provision through Crossplane `provider-aws-s3`. Credentials are sealed and projected via `extraEnvFrom` + `-config.expand-env=true` so no keys land in the rendered config.
+Deploy Loki via the new `grafana-community/loki` chart in **Monolithic** mode (`deploymentMode: Monolithic`, `singleBinary.replicas: 1`). TSDB index and chunks are stored in RustFS; an Argo CD PreSync Job creates the `loki-chunks` bucket idempotently before Loki starts. Credentials are sealed and projected via `extraEnvFrom` + `-config.expand-env=true` so no keys land in the rendered config.
 
 ## Consequences
 
@@ -18,3 +18,4 @@ Deploy Loki via the new `grafana-community/loki` chart in **Monolithic** mode (`
 - Switching to SimpleScalable later means flipping a single `deploymentMode` value — but per upstream that mode is being removed, so the realistic upgrade path is Monolithic → Distributed if we ever outgrow this.
 - No bundled Memcached / no Loki gateway / no self-monitoring agent — keeping the stack thin. kube-prometheus-stack scrapes Loki's own `/metrics` separately.
 - 7-day retention by default, set in `limits_config.retention_period`. Bumping it just means more S3 storage on RustFS.
+- Bucket provisioning is intentionally narrow: the PreSync Job only ensures the bucket exists and does not manage lifecycle, policies, or contents.

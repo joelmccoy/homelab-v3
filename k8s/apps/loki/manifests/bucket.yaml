@@ -1,14 +1,44 @@
-# Crossplane-managed S3 bucket on RustFS. Wave -50 (same pattern as Keycloak
-# Client CRs) so the bucket exists before the Loki StatefulSet tries to write.
-apiVersion: s3.aws.upbound.io/v1beta2
-kind: Bucket
+# Argo-managed bucket bootstrap for RustFS. This stays deliberately small:
+# ensure the bucket exists before Loki starts, then let Loki own its contents.
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: loki-chunks
+  name: loki-create-bucket
+  namespace: loki
   annotations:
     argocd.argoproj.io/sync-wave: "-50"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
 spec:
-  forProvider:
-    region: us-east-1
-  providerConfigRef:
-    name: rustfs
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: create-bucket
+          image: amazon/aws-cli:2.34.27
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: AWS_DEFAULT_REGION
+              value: us-east-1
+            - name: AWS_EC2_METADATA_DISABLED
+              value: "true"
+            - name: BUCKET_NAME
+              value: loki-chunks
+            - name: S3_ENDPOINT
+              value: http://rustfs-svc.rustfs.svc.cluster.local:9000
+          envFrom:
+            - secretRef:
+                name: loki-s3-credentials
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              if aws --endpoint-url "$S3_ENDPOINT" s3api head-bucket --bucket "$BUCKET_NAME" >/dev/null 2>&1; then
+                echo "Bucket $BUCKET_NAME already exists"
+                exit 0
+              fi
+
+              aws --endpoint-url "$S3_ENDPOINT" s3api create-bucket \
+                --bucket "$BUCKET_NAME" \
+                --region "$AWS_DEFAULT_REGION"
