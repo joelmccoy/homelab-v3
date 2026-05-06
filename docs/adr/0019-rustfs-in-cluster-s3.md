@@ -17,4 +17,4 @@ Adopt RustFS (chart `rustfs/rustfs` v0.1.0, app v1.0.0-beta.1) in **standalone**
 - Beta software with ~70 open issues — acceptable for homelab use cases (Loki chunks, future Velero target). Anything truly critical should still go off-cluster.
 - Chicken-and-egg: when the cluster is unhealthy, neither RustFS nor the logs of why it failed are reachable. `kubectl logs` and Longhorn snapshots remain the bring-up safety net.
 - Migration path to distributed mode (when GA) is a redeploy + restore from Longhorn snapshot — disruptive but tractable.
-- Bucket bootstrapping is currently app-local: S3 consumers add a small Argo CD PreSync Job that runs `head-bucket || create-bucket` against RustFS. This avoids the current Crossplane AWS S3 provider compatibility problems with RustFS while keeping bucket creation ordered and GitOps-managed.
+- Bucket bootstrapping is currently app-local: S3 consumers add a small Argo CD Sync hook Job that runs `head-bucket || create-bucket` against RustFS. This avoids the current Crossplane AWS S3 provider compatibility problems with RustFS while keeping bucket creation ordered and GitOps-managed.

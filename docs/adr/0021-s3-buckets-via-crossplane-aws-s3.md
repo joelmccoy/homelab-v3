@@ -12,7 +12,7 @@ In practice, `provider-aws-s3` tracks the HashiCorp AWS provider and assumes AWS
 
 ## Decision
 
-Remove `xpkg.upbound.io/upbound/provider-aws-s3`, its RustFS `ProviderConfig`, and its credentials Secret. Use small Argo CD PreSync Jobs beside each S3-consuming app to perform an idempotent `head-bucket || create-bucket` against RustFS with path-style AWS CLI requests.
+Remove `xpkg.upbound.io/upbound/provider-aws-s3`, its RustFS `ProviderConfig`, and its credentials Secret. Use small Argo CD Sync hook Jobs beside each S3-consuming app to perform an idempotent `head-bucket || create-bucket` against RustFS with path-style AWS CLI requests.
 
 ## Consequences
 
