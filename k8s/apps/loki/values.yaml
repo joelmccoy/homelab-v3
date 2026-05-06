@@ -45,15 +45,13 @@ loki:
     enabled: false
 
 # Enable env-var expansion in loki-config.yaml.
-global:
+singleBinary:
+  replicas: 1
   extraArgs:
     - "-config.expand-env=true"
   extraEnvFrom:
     - secretRef:
         name: loki-s3-credentials
-
-singleBinary:
-  replicas: 1
   persistence:
     enabled: true
     size: 10Gi
@@ -95,7 +93,7 @@ monitoring:
     enabled: false
     grafanaAgent:
       installOperator: false
-  lokiCanary:
-    enabled: false
+lokiCanary:
+  enabled: false
 test:
   enabled: false
