@@ -1,8 +1,8 @@
 # OpenClaw agent overview
 
-> Last refreshed: 2026-05-05
+> Last refreshed: 2026-05-11
 
-Joel's homelab now has a small OpenClaw agent swarm around it: one primary assistant, a homelab engineer, a PM coordinator, a meal-planning agent, a market-research/paper-trading agent, and an optimizer. This page is the public-friendly map of who exists, what each agent owns, and how the big workflows move.
+Joel's OpenClaw setup is a small, approval-gated agent swarm: a primary assistant, project manager, homelab engineers, meal planner, health coach, AI-infra signal researcher, business-development pair, and optimizer. This page is the public-friendly map of who exists, what each agent owns, and how the main workflows move.
 
 ## Agent map
 
@@ -10,17 +10,26 @@ Joel's homelab now has a small OpenClaw agent swarm around it: one primary assis
 flowchart LR
     Joel((Joel)) --> Ellie["✨ Ellie\nPrimary assistant"]
     Joel --> Morgan["📋 Morgan\nProject manager"]
+    Joel --> Michael["💼 Michael Scott\nBusiness-development PM"]
 
     Ellie --> Morgan
     Morgan --> Kaneo[(Kaneo board)]
     Morgan --> Rick["🛠️ Rick\nHomelab engineer"]
+    Morgan --> RickClone["🛠️ Rick Clone 1\nHomelab peer"]
     Morgan --> Julie["🍽️ Chef Julie\nMeals + groceries"]
+    Morgan --> Rich["🏃 Rich Roll\nFitness coach"]
     Morgan --> Jordan["📈 Jordan\nAI infra signals"]
     Morgan --> Q["🧪 Q\nOptimizer"]
 
+    Michael --> Mira["🔎 Mira\nMarket analyst"]
+    Michael --> MoneyKaneo[(Money Making board)]
+    Mira --> MoneyKaneo
+
     Rick --> Homelab[(homelab-v3 repo)]
+    RickClone --> Homelab
     Homelab --> Argo["Argo CD\nGitOps sync"]
     Julie --> Mealie[(Mealie)]
+    Rich --> Oura[(Oura read-only)]
     Jordan --> Ledger[(Paper ledger)]
     Q --> OpenClaw[(OpenClaw config + usage)]
 ```
@@ -29,20 +38,24 @@ flowchart LR
 
 | Agent | Role | Primary surfaces | Cadence | Page |
 | --- | --- | --- | --- | --- |
-| ✨ Ellie | Primary personal assistant and default Telegram interface. | Telegram direct chat, OpenClaw workspace memory. | On demand, plus daily tech/news brief. | [Ellie](ellie.md) |
-| 🛠️ Rick | Homelab platform/SRE engineer for `joelmccoy/homelab-v3`. | Homelab repo, GitHub PRs, read-only infra diagnostics when needed. | Daily security/cleanup review; on-demand build/review work. | [Rick](rick.md) |
-| 📋 Morgan | PM coordinator for Kaneo tasks and agent handoffs. | Kaneo board, Telegram summaries, agent sessions. | Hourly daytime sweep, 9 PM final sweep, weekly capture prompt. | [Morgan](morgan.md) |
-| 🍽️ Chef Julie | Vegetarian meal planning, recipe curation, grocery handoff, meal feedback. | Mealie, local meal-planning memory, Telegram approvals. | Weekly meal-planning cadence plus recipe scouting/research. | [Chef Julie](chef-julie.md) |
+| ✨ Ellie | Primary personal assistant and default Telegram interface. | Telegram direct chat, OpenClaw workspace memory. | On demand; weekday AI/platform brief; Thursday Austin events shortlist. | [Ellie](ellie.md) |
+| 📋 Morgan | PM coordinator for Kaneo tasks and agent handoffs. | Kaneo board, Telegram summaries, agent sessions. | Weekday morning/evening PM sweeps; weekly capture prompt. | [Morgan](morgan.md) |
+| 🛠️ Rick | Homelab platform/SRE engineer for `joelmccoy/homelab-v3`. | Homelab repo, GitHub PRs, read-only infra diagnostics when needed. | Daily security/cleanup review; weekly agent-doc inventory; on-demand build/review work. | [Rick](rick.md) |
+| 🛠️ Rick Clone 1 | Second narrow homelab/coder agent and peer reviewer. | Homelab repo, GitHub PR review comments, Kaneo handoffs. | Daily homelab peer-review check; on-demand bounded implementation/review. | [Rick Clone 1](rick-clone-1.md) |
+| 🍽️ Chef Julie | Vegetarian meal planning, recipe curation, grocery handoff, meal feedback. | Mealie, local meal-planning memory, Telegram approvals. | Weekly intake/plan/grocery/feedback loop; recipe scouting; grocery-provider research. | [Chef Julie](chef-julie.md) |
+| 🏃 Rich Roll | Lightweight fitness, recovery, and daily movement coach. | Oura read-only summaries, local health-coach notes, Telegram check-ins. | Daily morning recommendation and evening check-in. | [Rich Roll](rich-roll.md) |
 | 📈 Jordan Belfort | AI-infra bottleneck signal research and paper-trading ledger. | Public/user-provided sources, local paper ledger, Telegram summaries. | Weekday daily market/signal ingestion. | [Jordan](jordan.md) |
-| 🧪 Q | OpenClaw optimizer and agent-swarm quartermaster. | OpenClaw status, cron/session metadata, per-agent notes. | Daily optimizer sweep and weekly usage report. | [Q](q.md) |
+| 💼 Michael Scott | Approval-gated business-development PM for passive/semi-passive income experiments. | Kaneo Money Making project, opportunity memos, Telegram approval asks. | Daily sprint-style niche scan, memo builder, and pipeline review during active research windows. | [Michael Scott](michael-scott.md) |
+| 🔎 Mira | Market-intelligence analyst for Michael's money-making research. | Public research, competitor/pricing evidence, opportunity scorecards. | On demand / delegated research; workspace exists for specialist market-analysis work. | [Mira](mira.md) |
+| 🧪 Q | OpenClaw optimizer and agent-swarm quartermaster. | OpenClaw status, cron/session metadata, per-agent notes. | Weekday optimizer sweep and weekly usage report. | [Q](q.md) |
 
 ## Operating principles
 
-- **Joel stays in control.** Agents can inspect and draft freely, but external writes, purchases, messages, repo PRs, and risky infra actions require the right approval boundary.
-- **Kaneo is the coordination board.** Morgan keeps tasks clear, owned, and linked before handing work to another agent.
-- **GitOps first for the homelab.** Rick changes the repo, opens PRs, and lets Joel merge. Runtime cluster state should converge through Argo CD.
-- **Small, focused changes.** Agents should avoid churn, speculative abstractions, and noisy reports.
-- **Durable state is documented.** Agent workspace memory and skills live in the private OpenClaw state repo; homelab architecture and operational docs live here.
+- **Joel stays in control.** Agents can inspect and draft freely, but external writes, purchases, messages, repo PRs, public actions, financial actions, and risky infra actions require the right approval boundary.
+- **Kaneo is the coordination board.** Morgan keeps homelab/agent tasks clear, owned, and linked; Michael uses a separate Money Making project for revenue research.
+- **GitOps first for the homelab.** Rick and Rick Clone 1 change the repo, open PRs, and let Joel merge. Runtime cluster state should converge through Argo CD.
+- **Small, focused changes.** Agents should avoid churn, speculative abstractions, noisy reports, and vague handoffs.
+- **Durable state is documented privately.** Agent workspace memory and skills live in private OpenClaw state; public homelab architecture and operational docs live here.
 
 ## High-level workflows
 
@@ -66,12 +79,13 @@ sequenceDiagram
     Agent->>Joel: Ask only for decisions/blockers/review
 ```
 
-### 2. Homelab GitOps change
+### 2. Homelab GitOps change and peer review
 
 ```mermaid
 sequenceDiagram
     participant Joel
     participant Rick
+    participant Clone as Rick Clone 1
     participant Repo as homelab-v3
     participant GitHub
     participant ArgoCD as Argo CD
@@ -80,6 +94,7 @@ sequenceDiagram
     Rick->>Repo: Create focused branch and edit docs/manifests/tofu
     Rick->>Repo: Run validation gate
     Rick->>GitHub: Open PR with risk, validation, rollback notes
+    Clone->>GitHub: Review meaningful Rick/Rick Clone-owned changes when useful
     Joel->>GitHub: Review and merge
     GitHub->>ArgoCD: Main branch changes
     ArgoCD->>ArgoCD: Reconcile cluster apps
@@ -105,8 +120,19 @@ Chef Julie follows a weekly loop:
 3. Sunday grocery handoff for the approved plan/list; no checkout or purchase automation.
 4. Saturday feedback capture so repeats, skips, and modifications improve future plans.
 5. Recipe scouting proposes real linked recipes and asks before Mealie imports.
+6. Grocery-provider research stays read-only or dry-run unless Joel approves a specific cart/provider test.
 
-### 5. AI-infra signal research
+### 5. Fitness and recovery coaching
+
+Rich Roll keeps the health loop lightweight:
+
+1. Read allowed Oura recovery/activity signals and recent local check-ins.
+2. Give one practical morning movement recommendation.
+3. Ask a tiny evening activity/energy check-in.
+4. Use trends and Joel's subjective report; avoid medical diagnosis or dramatic reactions to one bad night.
+5. Ask before adding integrations, storing raw data long term, or expanding the coaching scope.
+
+### 6. AI-infra signal research
 
 Jordan's research loop:
 
@@ -116,7 +142,17 @@ Jordan's research loop:
 4. Mark open positions and preserve evidence.
 5. Send Joel only meaningful deltas, never live-trade actions.
 
-### 6. Swarm optimization
+### 7. Business-development research
+
+Michael and Mira keep revenue ideas approval-gated:
+
+1. Michael maintains the Money Making board and decides which opportunities need research.
+2. Mira investigates customer pain, competitors, pricing, demand signals, and rough economics from public evidence.
+3. Michael turns promising lanes into concise opportunity memos and approval asks.
+4. No spend, outreach, publishing, account creation, public endpoints, or customer commitments happen without Joel's explicit approval.
+5. Ideas are killed quickly when evidence is weak or the lane is not solo-operable enough.
+
+### 8. Swarm optimization
 
 Q watches for ways to make the whole setup cheaper, quieter, and more reliable:
 
@@ -127,11 +163,11 @@ Q watches for ways to make the whole setup cheaper, quieter, and more reliable:
 
 ## Weekly inventory upkeep
 
-A weekly OpenClaw job keeps this directory fresh. The job should:
+A weekly Rick job keeps this directory fresh. The job should:
 
 1. Inspect current OpenClaw agents, workspaces, and cron jobs.
 2. Compare them to this overview and the per-agent pages.
 3. Open or prepare a docs update whenever the roster, cadence, responsibilities, or safety boundaries change.
-4. Ask Rick to turn the local docs branch into a PR against `joelmccoy/homelab-v3`.
+4. Use Rick's repo-scoped GitHub App helper for bot commits and PRs.
 
 This is intentionally lightweight: the point is to keep the agent map trustworthy without creating documentation theater.
