@@ -12,7 +12,7 @@ spec:
     # grafana/loki chart now targets Grafana Enterprise Logs only.
     - repoURL: https://grafana-community.github.io/helm-charts
       chart: loki
-      targetRevision: 13.5.0
+      targetRevision: 13.6.2
       helm:
         releaseName: loki
         valueFiles:
