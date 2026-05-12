@@ -10,7 +10,7 @@ spec:
   sources:
     - repoURL: https://charts.rustfs.com
       chart: rustfs
-      targetRevision: 0.1.0
+      targetRevision: 0.2.0
       helm:
         releaseName: rustfs
         valueFiles:
