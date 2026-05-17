@@ -44,7 +44,7 @@ jobs:
             -v "${{ github.workspace }}/output:/output" \
             -e TARGET_BRANCH="${{ github.head_ref }}" \
             -e REPO="${{ github.repository }}" \
-            dagandersen/argocd-diff-preview:v0.2.5@sha256:3bf7e0603d920b07c913954203daeb691edf5996a036c93fa2004358cef2a4f6
+            dagandersen/argocd-diff-preview:v0.2.7@sha256:be51cde7afa24d8463b370169ca740179f6ade697ac18406dc5b45b048d1e48c
 
       - name: Post diff as PR comment
         run: |
