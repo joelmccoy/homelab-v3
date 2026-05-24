@@ -100,6 +100,9 @@ plain manifests, or both.
 
 ## Public routes
 
+The public Istio Gateway only accepts HTTPRoutes from namespaces labeled
+`gateway.joelmccoy.dev/public-routes=true`.
+
 | Hostname | Owner | Purpose |
 | --- | --- | --- |
 | [`argo.joelmccoy.dev`](https://argo.joelmccoy.dev) | Argo CD | GitOps UI and operational dashboard. |
