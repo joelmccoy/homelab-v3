@@ -6,4 +6,5 @@ metadata:
     argocd.argoproj.io/sync-wave: "-100"
   labels:
     app.kubernetes.io/name: rustfs
+    gateway.joelmccoy.dev/public-routes: "true"
     istio.io/dataplane-mode: ambient

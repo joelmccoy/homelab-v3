@@ -26,4 +26,10 @@ spec:
             name: wildcard-joelmccoy-dev-tls
       allowedRoutes:
         namespaces:
-          from: All
+          # Only namespaces explicitly marked as public may bind HTTPRoutes to
+          # this wildcard internet-facing gateway. Otherwise any namespace with
+          # Route write access could expose a Service via Cloudflare Tunnel.
+          from: Selector
+          selector:
+            matchLabels:
+              gateway.joelmccoy.dev/public-routes: "true"
