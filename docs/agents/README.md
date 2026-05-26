@@ -17,7 +17,7 @@ flowchart LR
     Morgan --> Rick["🛠️ Rick\nHomelab engineer"]
     Morgan --> RickClone["🛠️ Rick Clone 1\nHomelab peer"]
     Morgan --> Julie["🍽️ Chef Julie\nMeals + groceries"]
-    Morgan --> Rich["🏃 Rich Roll\nFitness coach"]
+    Morgan --> Rich["🏃 Rich Roll\nRecovery/accountability coach"]
     Morgan --> Jordan["📈 Jordan\nAI infra signals"]
     Morgan --> Q["🧪 Q\nOptimizer"]
 
@@ -43,7 +43,7 @@ flowchart LR
 | 🛠️ Rick | Homelab platform/SRE engineer for `joelmccoy/homelab-v3`. | Homelab repo, GitHub PRs, read-only infra diagnostics when needed. | Daily security/cleanup review; weekly agent-doc inventory; on-demand build/review work. | [Rick](rick.md) |
 | 🛠️ Rick Clone 1 | Second narrow homelab/coder agent and peer reviewer. | Homelab repo, GitHub PR review comments, Kaneo handoffs. | Daily homelab peer-review check; on-demand bounded implementation/review. | [Rick Clone 1](rick-clone-1.md) |
 | 🍽️ Chef Julie | Vegetarian meal planning, recipe curation, grocery handoff, meal feedback. | Mealie, local meal-planning memory, Telegram approvals. | Weekly intake/plan/grocery/feedback loop; recipe scouting; grocery-provider research. | [Chef Julie](chef-julie.md) |
-| 🏃 Rich Roll | Lightweight fitness, recovery, and daily movement accountability coach. | Oura read-only summaries, local health-coach notes, Telegram check-ins. | Daily morning observation/accountability pass and evening check-in. | [Rich Roll](rich-roll.md) |
+| 🏃 Rich Roll | Lightweight recovery and activity-accountability coach. | Oura read-only summaries, local health-coach notes, Telegram check-ins. | Daily morning observation/accountability pass and evening check-in. | [Rich Roll](rich-roll.md) |
 | 📈 Jordan Belfort | AI-infra bottleneck signal research and paper-trading ledger. | Public/user-provided sources, local paper ledger, Telegram summaries. | Weekday daily market/signal ingestion. | [Jordan](jordan.md) |
 | 💼 Michael Scott | Approval-gated business-development PM for passive/semi-passive income experiments. | Kaneo Money Making project, opportunity memos, Telegram approval asks. | Daily sprint-style niche scan, memo builder, and pipeline review during active research windows. | [Michael Scott](michael-scott.md) |
 | 🔎 Mira | Market-intelligence analyst for Michael's money-making research. | Public research, competitor/pricing evidence, opportunity scorecards. | On demand / delegated research; workspace exists for specialist market-analysis work. | [Mira](mira.md) |
@@ -122,7 +122,7 @@ Chef Julie follows a weekly loop:
 5. Recipe scouting proposes real linked recipes and asks before Mealie imports.
 6. Grocery-provider research stays read-only or dry-run unless Joel approves a specific cart/provider test.
 
-### 5. Fitness and recovery coaching
+### 5. Recovery and activity accountability
 
 Rich Roll keeps the health loop lightweight:
 
