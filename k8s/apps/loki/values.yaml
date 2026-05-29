@@ -4,6 +4,11 @@
 deploymentMode: Monolithic
 
 loki:
+  # Pin the Loki app image explicitly so chart bumps cannot roll runtime
+  # binaries as an implicit appVersion side effect.
+  image:
+    repository: grafana/loki
+    tag: 3.7.1
   auth_enabled: false
   # Single-replica monolithic; no replication at the Loki layer (Longhorn handles
   # WAL durability, RustFS handles chunk durability).
