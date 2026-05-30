@@ -4,6 +4,15 @@
 controller:
   type: daemonset
 
+image:
+  repository: grafana/alloy
+  tag: v1.16.1
+
+configReloader:
+  image:
+    repository: prometheus-operator/prometheus-config-reloader
+    tag: v0.81.0
+
 alloy:
   configMap:
     content: |
