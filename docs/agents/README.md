@@ -1,6 +1,6 @@
 # OpenClaw agent overview
 
-> Last refreshed: 2026-05-25
+> Last refreshed: 2026-06-01
 
 Joel's OpenClaw setup is a small, approval-gated agent swarm: a primary assistant, project manager, homelab engineers, meal planner, health coach, AI-infra signal researcher, business-development pair, and optimizer. This page is the public-friendly map of who exists, what each agent owns, and how the main workflows move.
 
