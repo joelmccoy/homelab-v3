@@ -1,6 +1,6 @@
 # OpenClaw agent overview
 
-> Last refreshed: 2026-05-11
+> Last refreshed: 2026-06-15
 
 Joel's OpenClaw setup is a small, approval-gated agent swarm: a primary assistant, project manager, homelab engineers, meal planner, health coach, AI-infra signal researcher, business-development pair, and optimizer. This page is the public-friendly map of who exists, what each agent owns, and how the main workflows move.
 
@@ -43,11 +43,11 @@ flowchart LR
 | 🛠️ Rick | Homelab platform/SRE engineer for `joelmccoy/homelab-v3`. | Homelab repo, GitHub PRs, read-only infra diagnostics when needed. | Daily security/cleanup review; weekly agent-doc inventory; on-demand build/review work. | [Rick](rick.md) |
 | 🛠️ Rick Clone 1 | Second narrow homelab/coder agent and peer reviewer. | Homelab repo, GitHub PR review comments, Kaneo handoffs. | Daily homelab peer-review check; on-demand bounded implementation/review. | [Rick Clone 1](rick-clone-1.md) |
 | 🍽️ Chef Julie | Vegetarian meal planning, recipe curation, grocery handoff, meal feedback. | Mealie, local meal-planning memory, Telegram approvals. | Weekly intake/plan/grocery/feedback loop; recipe scouting; grocery-provider research. | [Chef Julie](chef-julie.md) |
-| 🏃 Rich Roll | Lightweight fitness, recovery, and daily movement coach. | Oura read-only summaries, local health-coach notes, Telegram check-ins. | Daily morning recommendation and evening check-in. | [Rich Roll](rich-roll.md) |
+| 🏃 Rich Roll | Lightweight fitness, recovery, and daily movement coach. | Oura read-only summaries, local health-coach notes, Telegram check-ins. | On demand; scheduled coaching cron is not currently active. | [Rich Roll](rich-roll.md) |
 | 📈 Jordan Belfort | AI-infra bottleneck signal research and paper-trading ledger. | Public/user-provided sources, local paper ledger, Telegram summaries. | Weekday daily market/signal ingestion. | [Jordan](jordan.md) |
 | 💼 Michael Scott | Approval-gated business-development PM for passive/semi-passive income experiments. | Kaneo Money Making project, opportunity memos, Telegram approval asks. | Daily sprint-style niche scan, memo builder, and pipeline review during active research windows. | [Michael Scott](michael-scott.md) |
 | 🔎 Mira | Market-intelligence analyst for Michael's money-making research. | Public research, competitor/pricing evidence, opportunity scorecards. | On demand / delegated research; workspace exists for specialist market-analysis work. | [Mira](mira.md) |
-| 🧪 Q | OpenClaw optimizer and agent-swarm quartermaster. | OpenClaw status, cron/session metadata, per-agent notes. | Weekday optimizer sweep and weekly usage report. | [Q](q.md) |
+| 🧪 Q | OpenClaw optimizer and agent-swarm quartermaster. | OpenClaw status, cron/session metadata, per-agent notes. | Weekly usage report; weekday optimizer sweep is currently disabled. | [Q](q.md) |
 
 ## Operating principles
 
@@ -124,13 +124,13 @@ Chef Julie follows a weekly loop:
 
 ### 5. Fitness and recovery coaching
 
-Rich Roll keeps the health loop lightweight:
+Rich Roll keeps the health loop lightweight when Joel asks for coaching or an approved check-in is active:
 
 1. Read allowed Oura recovery/activity signals and recent local check-ins.
-2. Give one practical morning movement recommendation.
-3. Ask a tiny evening activity/energy check-in.
+2. Give one practical movement or recovery recommendation.
+3. Ask tiny activity/energy check-ins only when useful.
 4. Use trends and Joel's subjective report; avoid medical diagnosis or dramatic reactions to one bad night.
-5. Ask before adding integrations, storing raw data long term, or expanding the coaching scope.
+5. Ask before adding integrations, storing raw data long term, scheduling new check-ins, or expanding the coaching scope.
 
 ### 6. AI-infra signal research
 
@@ -154,12 +154,13 @@ Michael and Mira keep revenue ideas approval-gated:
 
 ### 8. Swarm optimization
 
-Q watches for ways to make the whole setup cheaper, quieter, and more reliable:
+Q watches for ways to make the whole setup cheaper, quieter, and more reliable, with broad optimizer sweeps currently paused:
 
-1. Inspect cron jobs, agent workspaces, session/status signals, and usage metadata.
-2. Preserve per-agent notes.
-3. Recommend deterministic scripts, narrower tools, compaction, or cadence changes only when evidence supports it.
-4. Ask Joel for explicit approval before changing another agent, config, cron, repo, or external service.
+1. Generate the weekly usage report from metadata only.
+2. Inspect cron jobs, agent workspaces, session/status signals, and usage metadata when explicitly asked or when an approved sweep is active.
+3. Preserve per-agent notes when evidence changes.
+4. Recommend deterministic scripts, narrower tools, compaction, or cadence changes only when evidence supports it.
+5. Ask Joel for explicit approval before changing another agent, config, cron, repo, or external service.
 
 ## Weekly inventory upkeep
 
