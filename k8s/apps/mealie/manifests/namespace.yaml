@@ -5,5 +5,6 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-100"
   labels:
+    gateway.joelmccoy.dev/public-routes: "true"
     app.kubernetes.io/name: mealie
     istio.io/dataplane-mode: ambient

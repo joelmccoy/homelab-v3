@@ -5,6 +5,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-100"
   labels:
+    gateway.joelmccoy.dev/public-routes: "true"
     app.kubernetes.io/name: monitoring
     # node-exporter DaemonSet runs hostNetwork + hostPath + hostPort.
     pod-security.kubernetes.io/enforce: privileged
