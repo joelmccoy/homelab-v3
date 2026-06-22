@@ -1,4 +1,4 @@
-# 🛠️ Rick Clone 1
+# 🧬 Rick Clone 1
 
 **Role:** Second narrow homelab/coder agent and peer reviewer for `joelmccoy/homelab-v3`.
 
