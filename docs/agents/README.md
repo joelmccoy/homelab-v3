@@ -1,6 +1,6 @@
 # OpenClaw agent overview
 
-> Last refreshed: 2026-05-11
+> Last refreshed: 2026-06-22
 
 Joel's OpenClaw setup is a small, approval-gated agent swarm: a primary assistant, project manager, homelab engineers, meal planner, health coach, AI-infra signal researcher, business-development pair, and optimizer. This page is the public-friendly map of who exists, what each agent owns, and how the main workflows move.
 
@@ -15,7 +15,7 @@ flowchart LR
     Ellie --> Morgan
     Morgan --> Kaneo[(Kaneo board)]
     Morgan --> Rick["🛠️ Rick\nHomelab engineer"]
-    Morgan --> RickClone["🛠️ Rick Clone 1\nHomelab peer"]
+    Morgan --> RickClone["🧬 Rick Clone 1\nHomelab peer"]
     Morgan --> Julie["🍽️ Chef Julie\nMeals + groceries"]
     Morgan --> Rich["🏃 Rich Roll\nFitness coach"]
     Morgan --> Jordan["📈 Jordan\nAI infra signals"]
@@ -41,13 +41,13 @@ flowchart LR
 | ✨ Ellie | Primary personal assistant and default Telegram interface. | Telegram direct chat, OpenClaw workspace memory. | On demand; weekday AI/platform brief; Thursday Austin events shortlist. | [Ellie](ellie.md) |
 | 📋 Morgan | PM coordinator for Kaneo tasks and agent handoffs. | Kaneo board, Telegram summaries, agent sessions. | Weekday morning/evening PM sweeps; weekly capture prompt. | [Morgan](morgan.md) |
 | 🛠️ Rick | Homelab platform/SRE engineer for `joelmccoy/homelab-v3`. | Homelab repo, GitHub PRs, read-only infra diagnostics when needed. | Daily security/cleanup review; weekly agent-doc inventory; on-demand build/review work. | [Rick](rick.md) |
-| 🛠️ Rick Clone 1 | Second narrow homelab/coder agent and peer reviewer. | Homelab repo, GitHub PR review comments, Kaneo handoffs. | Daily homelab peer-review check; on-demand bounded implementation/review. | [Rick Clone 1](rick-clone-1.md) |
+| 🧬 Rick Clone 1 | Second narrow homelab/coder agent and peer reviewer. | Homelab repo, GitHub PR review comments, Kaneo handoffs. | Daily homelab peer-review check; on-demand bounded implementation/review. | [Rick Clone 1](rick-clone-1.md) |
 | 🍽️ Chef Julie | Vegetarian meal planning, recipe curation, grocery handoff, meal feedback. | Mealie, local meal-planning memory, Telegram approvals. | Weekly intake/plan/grocery/feedback loop; recipe scouting; grocery-provider research. | [Chef Julie](chef-julie.md) |
-| 🏃 Rich Roll | Lightweight fitness, recovery, and daily movement coach. | Oura read-only summaries, local health-coach notes, Telegram check-ins. | Daily morning recommendation and evening check-in. | [Rich Roll](rich-roll.md) |
+| 🏃 Rich Roll | Lightweight fitness, recovery, and daily movement accountability coach. | Oura read-only summaries, local health-coach notes, Telegram check-ins. | On demand; no current scheduled coach cron. | [Rich Roll](rich-roll.md) |
 | 📈 Jordan Belfort | AI-infra bottleneck signal research and paper-trading ledger. | Public/user-provided sources, local paper ledger, Telegram summaries. | Weekday daily market/signal ingestion. | [Jordan](jordan.md) |
-| 💼 Michael Scott | Approval-gated business-development PM for passive/semi-passive income experiments. | Kaneo Money Making project, opportunity memos, Telegram approval asks. | Daily sprint-style niche scan, memo builder, and pipeline review during active research windows. | [Michael Scott](michael-scott.md) |
+| 💼 Michael Scott | Approval-gated business-development PM for passive/semi-passive income experiments. | Kaneo Money Making project, opportunity memos, Telegram approval asks. | On demand / approved research windows; no current recurring cron. | [Michael Scott](michael-scott.md) |
 | 🔎 Mira | Market-intelligence analyst for Michael's money-making research. | Public research, competitor/pricing evidence, opportunity scorecards. | On demand / delegated research; workspace exists for specialist market-analysis work. | [Mira](mira.md) |
-| 🧪 Q | OpenClaw optimizer and agent-swarm quartermaster. | OpenClaw status, cron/session metadata, per-agent notes. | Weekday optimizer sweep and weekly usage report. | [Q](q.md) |
+| 🧪 Q | OpenClaw optimizer and agent-swarm quartermaster. | OpenClaw status, cron/session metadata, per-agent notes. | Weekly usage report; weekday optimizer sweep currently disabled. | [Q](q.md) |
 
 ## Operating principles
 
@@ -124,13 +124,13 @@ Chef Julie follows a weekly loop:
 
 ### 5. Fitness and recovery coaching
 
-Rich Roll keeps the health loop lightweight:
+Rich Roll keeps the health loop lightweight and observation-first:
 
-1. Read allowed Oura recovery/activity signals and recent local check-ins.
-2. Give one practical morning movement recommendation.
-3. Ask a tiny evening activity/energy check-in.
+1. Read allowed Oura recovery/activity signals and recent local check-ins when asked.
+2. Reflect what the recent trend suggests without turning it into activity instructions.
+3. Capture tiny subjective activity/energy check-ins when Joel provides them.
 4. Use trends and Joel's subjective report; avoid medical diagnosis or dramatic reactions to one bad night.
-5. Ask before adding integrations, storing raw data long term, or expanding the coaching scope.
+5. Ask before adding integrations, storing raw data long term, adding cron jobs, or expanding the coaching scope.
 
 ### 6. AI-infra signal research
 
