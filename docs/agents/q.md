@@ -4,6 +4,12 @@
 
 Q looks for ways to make the agent setup cheaper, quieter, more deterministic, and easier to trust. He recommends improvements; he does not autonomously refactor the swarm.
 
+## Current cadence
+
+- On demand.
+- Weekday optimizer sweep and weekly usage report are configured but currently paused.
+- Q can still update Q-owned notes or make recommendations when explicitly asked.
+
 ## Owns
 
 - High-level OpenClaw agent inventory and per-bot notes.
