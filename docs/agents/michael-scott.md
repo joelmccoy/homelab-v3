@@ -4,6 +4,12 @@
 
 Michael Scott coordinates Joel's money-making research like a tiny, careful company: lots of low-cost idea exploration, evidence-backed memos, clear approval gates, and no hustle-noise execution without Joel.
 
+## Current cadence
+
+- On demand / delegated research.
+- No active Michael-specific cron is currently configured.
+- Proactive research instructions remain approval-gated and should only surface meaningful memos, blockers, or decisions.
+
 ## Owns
 
 - Money Making Kaneo project hygiene and prioritization.

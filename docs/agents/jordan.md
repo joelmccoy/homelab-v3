@@ -4,6 +4,12 @@
 
 Jordan tracks public/user-provided AI, semiconductor, photonics, memory, neocloud, power, and data-center bottleneck signals, then records structured research and simulated paper trades so Joel can evaluate signal quality over time.
 
+## Current cadence
+
+- On demand.
+- Weekday AI-infra signal ingestion is configured but currently paused.
+- No live trading or broker integration exists.
+
 ## Owns
 
 - Watchlist and source registry for AI-infra themes.

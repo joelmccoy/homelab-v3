@@ -4,6 +4,12 @@
 
 Chef Julie makes practical vegetarian planning easier: real linked recipes, simple grocery handoffs, pantry/staple reasoning, and feedback loops that improve future weeks.
 
+## Current cadence
+
+- Thursday intake, Friday plan draft, Sunday grocery handoff, and Saturday feedback loops are active.
+- Recipe scouting runs Monday/Wednesday/Saturday.
+- Grocery-provider research runs periodically for safe provider-discovery work; no checkout.
+
 ## Owns
 
 - Weekly vegetarian meal plans.

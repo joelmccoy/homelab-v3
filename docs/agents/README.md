@@ -1,8 +1,8 @@
 # OpenClaw agent overview
 
-> Last refreshed: 2026-05-11
+> Last refreshed: 2026-06-29
 
-Joel's OpenClaw setup is a small, approval-gated agent swarm: a primary assistant, project manager, homelab engineers, meal planner, health coach, AI-infra signal researcher, business-development pair, and optimizer. This page is the public-friendly map of who exists, what each agent owns, and how the main workflows move.
+Joel's OpenClaw setup is a small, approval-gated agent swarm: a primary assistant, project manager, homelab engineers, meal planner, health coach, AI-infra signal researcher, business-development pair, and optimizer. This page is the public-friendly map of who exists, what each agent owns, which scheduled loops are currently active, and how the main workflows move.
 
 ## Agent map
 
@@ -38,16 +38,16 @@ flowchart LR
 
 | Agent | Role | Primary surfaces | Cadence | Page |
 | --- | --- | --- | --- | --- |
-| ✨ Ellie | Primary personal assistant and default Telegram interface. | Telegram direct chat, OpenClaw workspace memory. | On demand; weekday AI/platform brief; Thursday Austin events shortlist. | [Ellie](ellie.md) |
-| 📋 Morgan | PM coordinator for Kaneo tasks and agent handoffs. | Kaneo board, Telegram summaries, agent sessions. | Weekday morning/evening PM sweeps; weekly capture prompt. | [Morgan](morgan.md) |
+| ✨ Ellie | Primary personal assistant and default Telegram interface. | Telegram direct chat, OpenClaw workspace memory. | On demand; Thursday Austin events shortlist active; weekday AI/platform brief configured but paused. | [Ellie](ellie.md) |
+| 📋 Morgan | PM coordinator for Kaneo tasks and agent handoffs. | Kaneo board, Telegram summaries, agent sessions. | On demand; weekly big-ticket capture active; routine PM sweeps configured but paused. | [Morgan](morgan.md) |
 | 🛠️ Rick | Homelab platform/SRE engineer for `joelmccoy/homelab-v3`. | Homelab repo, GitHub PRs, read-only infra diagnostics when needed. | Daily security/cleanup review; weekly agent-doc inventory; on-demand build/review work. | [Rick](rick.md) |
 | 🛠️ Rick Clone 1 | Second narrow homelab/coder agent and peer reviewer. | Homelab repo, GitHub PR review comments, Kaneo handoffs. | Daily homelab peer-review check; on-demand bounded implementation/review. | [Rick Clone 1](rick-clone-1.md) |
 | 🍽️ Chef Julie | Vegetarian meal planning, recipe curation, grocery handoff, meal feedback. | Mealie, local meal-planning memory, Telegram approvals. | Weekly intake/plan/grocery/feedback loop; recipe scouting; grocery-provider research. | [Chef Julie](chef-julie.md) |
-| 🏃 Rich Roll | Lightweight fitness, recovery, and daily movement coach. | Oura read-only summaries, local health-coach notes, Telegram check-ins. | Daily morning recommendation and evening check-in. | [Rich Roll](rich-roll.md) |
-| 📈 Jordan Belfort | AI-infra bottleneck signal research and paper-trading ledger. | Public/user-provided sources, local paper ledger, Telegram summaries. | Weekday daily market/signal ingestion. | [Jordan](jordan.md) |
-| 💼 Michael Scott | Approval-gated business-development PM for passive/semi-passive income experiments. | Kaneo Money Making project, opportunity memos, Telegram approval asks. | Daily sprint-style niche scan, memo builder, and pipeline review during active research windows. | [Michael Scott](michael-scott.md) |
-| 🔎 Mira | Market-intelligence analyst for Michael's money-making research. | Public research, competitor/pricing evidence, opportunity scorecards. | On demand / delegated research; workspace exists for specialist market-analysis work. | [Mira](mira.md) |
-| 🧪 Q | OpenClaw optimizer and agent-swarm quartermaster. | OpenClaw status, cron/session metadata, per-agent notes. | Weekday optimizer sweep and weekly usage report. | [Q](q.md) |
+| 🏃 Rich Roll | Lightweight fitness, recovery, and movement coach. | Oura read-only summaries, local health-coach notes, Telegram check-ins. | On demand; no active daily coaching cron. | [Rich Roll](rich-roll.md) |
+| 📈 Jordan Belfort | AI-infra bottleneck signal research and paper-trading ledger. | Public/user-provided sources, local paper ledger, Telegram summaries. | On demand; weekday market/signal ingestion configured but paused. | [Jordan](jordan.md) |
+| 💼 Michael Scott | Approval-gated business-development PM for passive/semi-passive income experiments. | Kaneo Money Making project, opportunity memos, Telegram approval asks. | On demand / delegated research; no active cron. | [Michael Scott](michael-scott.md) |
+| 🔎 Mira | Market-intelligence analyst for Michael's money-making research. | Public research, competitor/pricing evidence, opportunity scorecards. | On demand / delegated research; no active cron. | [Mira](mira.md) |
+| 🧪 Q | OpenClaw optimizer and agent-swarm quartermaster. | OpenClaw status, cron/session metadata, per-agent notes. | On demand; weekday optimizer sweep and weekly usage report configured but paused. | [Q](q.md) |
 
 ## Operating principles
 
@@ -102,7 +102,7 @@ sequenceDiagram
 
 ### 3. PM and agent handoff
 
-Morgan keeps the swarm from turning into parallel chaos:
+Morgan keeps the swarm from turning into parallel chaos. The weekly big-ticket capture prompt is currently active; routine weekday/final PM sweeps are configured but paused until Joel wants them back on.
 
 1. Inspect Kaneo for stale, vague, blocked, or ready-for-review work.
 2. Make tasks handoff-ready: goal, owner, priority, next action, and definition of done.
@@ -124,7 +124,7 @@ Chef Julie follows a weekly loop:
 
 ### 5. Fitness and recovery coaching
 
-Rich Roll keeps the health loop lightweight:
+Rich Roll keeps the health loop lightweight. The agent exists for Oura-informed coaching and check-ins, but the daily morning/evening cron loop is not currently active.
 
 1. Read allowed Oura recovery/activity signals and recent local check-ins.
 2. Give one practical morning movement recommendation.
@@ -154,7 +154,7 @@ Michael and Mira keep revenue ideas approval-gated:
 
 ### 8. Swarm optimization
 
-Q watches for ways to make the whole setup cheaper, quieter, and more reliable:
+Q watches for ways to make the whole setup cheaper, quieter, and more reliable. Optimizer sweeps and weekly usage reports are configured but currently paused, so Q is mostly on-demand unless Joel re-enables those jobs.
 
 1. Inspect cron jobs, agent workspaces, session/status signals, and usage metadata.
 2. Preserve per-agent notes.
