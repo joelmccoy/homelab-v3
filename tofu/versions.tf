@@ -4,11 +4,11 @@ terraform {
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
-      version = "~> 0.106"
+      version = "~> 0.114"
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "~> 0.11"
+      version = "~> 0.12"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
